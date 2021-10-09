@@ -1,10 +1,3 @@
-# 11283group60
-
-Member1:  Claudia Rubio (Project Manager)
-Member2:  Shivan Desai  
-Member3:  Mason Anderson  (Scrum Master)
-Member4:  Kyle Helstrom  
-
 
 ## Project setup
 ```
@@ -25,3 +18,6 @@ npm run build
 ```
 npm run lint
 ```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
