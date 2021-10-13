@@ -1,47 +1,38 @@
 <template>
   <div class="home">
-    <h1>Register</h1>
-    <input type="text" placeholder="Email" v-model="email">
-    <input type="password" placeholder="Password" v-model="password">
-    <button @click.prevent="register">Sign Up/In</button>
+    <h1>Welcome to Beach Avengers!</h1>
+    <!-- SHOW THIS IF WE ARE NOT A USER AKA NOT SIGNED IN-->
+    <div v-if="!user" class="updates">
+      <h2 >Get started by logging in today.</h2>
+    <router-link class="router-button" to="login">Login Here. <Arrow class="arrow arrow-light" /></router-link>
+    </div>
+
+    <!-- SHOW THIS IF WE ARE A USER AKA SIGNED IN-->
+    <div v-if="user">
+      <h2>User is currently signed in.</h2>
+      <button @click="signOut">Sign Out</button>
+      <h5>This currently does nothing</h5>
+    </div>
   </div>
 </template>
 
 <script>
 
-import firebase from "firebase/app"
-import "firebase/auth"
-import db from "../firebase/firebaseInit"
-
-
+import "firebase/auth";
 
 export default {
   name: "Home",
-  components: {}, 
-  
-  data(){
-    return {
-      email: "",
-      password: ""
-    };
+  components: {},
+  computed:{
+    //Returns if we are logged in and authenticated
+    user() {
+      return this.$store.state.user;
+    },
   },
-methods: {
-  async register(){
-    if(this.email !== "" && this.password !== "")
-    {
-        const firebaseAuth = await firebase.auth();
-        const createUser = await firebaseAuth.createUserWithEmailAndPassword(this.email,this.password);
-        const result = await createUser;
-        const dataBase = db.collection("users").doc(result.user.uid);
-        await dataBase.set({email: this.email, password: this.password});
-
-        return;
-    }
-    return;
+  methods: {
+      
   },
-
-
 }
-
-};
+  
+ 
 </script>
