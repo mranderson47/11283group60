@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import firebase from "firebase/app";
 import "firebase/auth";
+import db from "../firebase/firebaseInit";
 
 Vue.use(Vuex)
 
@@ -10,8 +12,22 @@ export default new Vuex.Store({
     user: null,
   },
   mutations: {
+    updateUser(state, payload) {
+      state.user = payload;
+    },
   },
   actions: {
+      async getCurrentUser(user) {
+        const dataBase = await db.collection("users").doc(firebase.auth().currentUser.uid);
+        const dbResults = await dataBase.get();
+        const token = await user.getIdTokenResult();
+        console.log(dbResults);
+        console.log(token);
+
+    },
+
+
+   
   },
   modules: {
   }

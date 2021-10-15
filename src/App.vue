@@ -9,6 +9,8 @@
 
 <script>
 import NavBar from "./components/NavBar.vue";
+import firebase from "firebase/app";
+import "firebase/auth";
 export default {
   name: "app",
   components: {
@@ -17,7 +19,15 @@ export default {
   data() {
     return {};
   },
-  created() {},
+  created() {
+    firebase.auth().onAuthStateChanged((user) => {
+      this.$store.commit("updateUser", user);
+      if(user){
+      this.$store.dispatch("getCurrentUser", user);
+      }
+    });
+
+  },
   mounted() {},
   methods: {},
   watch: {},
