@@ -13,26 +13,23 @@ export default new Vuex.Store({
   
   },
   mutations: {
-  },
-  actions: {
-    action1() {
-      console.log("Hi from the store");
-    }, 
-  
+
     updateUser(state, payload) {
       state.user = payload;
     },
   },
   actions: {
-      async getCurrentUser(user) {
-        const dataBase = await db.collection("users").doc(firebase.auth().currentUser.uid);
-        const dbResults = await dataBase.get();
-        const token = await user.getIdTokenResult();
-        console.log(dbResults);
-        console.log(token);
+    async getCurrentUser(user) {
+      const dataBase = await db.collection("users").doc(firebase.auth().currentUser.uid);
+      const dbResults = await dataBase.get();
+      const token = await user.getIdTokenResult();
+      console.log(dbResults);
+      console.log(token);
 
     },
-
+    action1() {
+      console.log("Hi from the store");
+    }, 
 
   },
   modules: {
