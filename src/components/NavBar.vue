@@ -13,6 +13,9 @@
                 <li class="nav-item active">
                     <a class="nav-link active" href="./register">Register</a>
                 </li>
+                <li class="nav-item active">
+                    <a class="nav-link active" href="./event">Event</a>
+                </li>
             </ul>
 
             <div class=" user col-md-1">
