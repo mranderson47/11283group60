@@ -1,48 +1,47 @@
 <template>
-    <div class="form-wrap">
-        <form class="register">
+    <div class="container-sm">
         <p class="login-register">
             Already have an account?
             <router-link class="router-link" :to="{ name: 'Login' }">Login</router-link>
         </p>
         <h2>Create Your Beach Avengers Account</h2>
-        <div class="inputs">
-            <div class="input">
-            <input type="text" placeholder="First Name" v-model="firstName" />
-            <user class="icon" />
-            </div>
-            <div class="input">
-            <input type="text" placeholder="Last Name" v-model="lastName" />
-            <user class="icon" />
-            </div>
-            <div class="input">
-            <input type="text" placeholder="Username" v-model="username" />
-            <user class="icon" />
-            </div>
-            <div class="input">
-            <input type="text" placeholder="Email" v-model="email" />
-            <email class="icon" />
-            </div>
-            <div class="input">
-            <input type="password" placeholder="Password" v-model="password" />
-            <password class="icon" />
-            </div>
-            <div v-show="error" class="error">{{ this.errorMsg }}</div>
-        </div>
-        <button @click.prevent="register">Sign Up</button>
-        <div class="angle"></div>
+        <form>
+          <div class="form-group">
+            <label for="exampleFormControlInput1">Email address</label>
+            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" v-model="email">
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlInput1">First Name</label>
+            <input type="text" class="form-control" id="exampleFormControlInput1" v-model="firstName">
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlInput1">Last Name</label>
+            <input type="text" class="form-control" id="exampleFormControlInput1" v-model="lastName">
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlInput1">User Name</label>
+            <input type="text" class="form-control" id="exampleFormControlInput1" v-model="username">
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlInput1">Password</label>
+            <input type="password" class="form-control" id="exampleFormControlInput1" v-model="password">
+          </div>
+          <div v-show="error" class="error">{{ this.errorMsg }}</div>
+          <div class="form-group">
+            <button type="button" class="btn btn-primary" @click="register">Sign up</button>
+          </div>
         </form>
+        <div class="angle"></div>
+
         <div class="background"></div>
     </div>
 </template>
 
 <script>
 
+import "firebase/auth";
 import firebase from "firebase/app"
-import "firebase/auth"
 import db from "../firebase/firebaseInit"
-
-
 
 export default {
   name: "Register",
@@ -51,11 +50,15 @@ export default {
   data(){
     return {
       email: "",
-      password: ""
+      password: "",
+      firstName: "",
+      lastName: "",
+      username: "",
+      errorMsg: null,
     };
   },
-methods: {
-  async register(){
+  methods: {
+    async register(){
     if(this.email !== "" && this.password !== "")
     {
         const firebaseAuth = await firebase.auth();
@@ -69,15 +72,22 @@ methods: {
             firstname: this.firstName,
             lastName: this.lastName
              
-             });
+        });
 
         return;
     }
     return;
   },
 
-
-}
+  }
 
 };
 </script>
+<style scoped>
+  .container-sm {
+    width: 50%;
+  }
+  button {
+    margin-top: 1.5em;
+  }
+</style>
