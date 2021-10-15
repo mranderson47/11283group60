@@ -20,6 +20,8 @@
 <script>
 
 import "firebase/auth";
+import firebase from "firebase/app";
+
 
 export default {
   name: "Home",
@@ -37,7 +39,10 @@ export default {
     },
   },
   methods: {
-      
+      signOut() {
+      firebase.auth().signOut();
+      window.location.reload();
+    },
   },
 }
   
