@@ -6,16 +6,16 @@
           <router-link class="header" :to="{ name: 'Home' }">Beach Avengers</router-link>
           <ul>
             <li>
-              <a href="#"><youTube class="svg-icon"/></a>
+              <font-awesome-icon icon="recycle" size="2x"/>
             </li>
             <li>
-              <a href="#"><twitter class="svg-icon"/></a>
+              <font-awesome-icon icon="water" size="2x"/>
             </li>
             <li>
-              <a href="#"><instagram class="svg-icon"/></a>
+              <font-awesome-icon icon="umbrella-beach" size="2x"/>
             </li>
             <li>
-              <a href="#"><linkedin class="svg-icon"/></a>
+              <font-awesome-icon icon="comments" size="2x"/>
             </li>
           </ul>
         </div>
