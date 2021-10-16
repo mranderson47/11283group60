@@ -5,8 +5,10 @@
             <span class="navbar-toggler-icon"></span>
 
         </button>
+        
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav col-md-11">
+                
                 <li v-if="!user" class="nav-item active">
                     <a class="nav-link active" href="./login">Log In</a>
                 </li>
@@ -57,15 +59,26 @@ export default {
 </script>
 
 
-<style>
+<style lang="scss" scoped>
     .navbar {
         padding-left: 1rem;
+        
     }
     li {
         padding-left: 1rem;
+        
+        
+        
     }
     .user {
         align-content: right;
     }
+
+    .nav-item active{
+        &:hover{
+            color: rgba(255, 255, 255, 0.384);
+        }
+    }
+
 
 </style>

@@ -3,18 +3,20 @@
     <nav-bar class="nav-bar"/>
     <div class="app">
       <router-view />
+      <Footer />
     </div>
   </div>
 </template>
 
 <script>
 import NavBar from "./components/NavBar.vue";
+import Footer from "./components/Footer";
 import firebase from "firebase/app";
 import "firebase/auth";
 export default {
   name: "app",
   components: {
-    NavBar
+    NavBar, Footer
   },
   data() {
     return {};
