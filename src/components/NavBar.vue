@@ -19,7 +19,7 @@
                     <a class="nav-link active" href="./event">Events</a>
                 </li>
                 <li v-if="user" class="nav-item active">
-                    <a class="nav-link active" @click="signOut">Sign Out</a>
+                    <a class="nav-link active" href="./" @click="signOut">Sign Out</a>
                 </li>
             </ul>
 
