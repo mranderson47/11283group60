@@ -18,7 +18,7 @@
                 </li>
             </ul>
 
-            <div class=" user col-md-1">
+            <div v-if="user" class=" user col-md-1">
                 <a href="./profile">
                     <font-awesome-icon icon="user-circle" size="2x"/>
                 </a>
@@ -27,6 +27,21 @@
         </div>
         </nav>
 </template>
+
+<script>
+export default {
+    computed: {
+        //Return the current user session
+        user() {
+        return this.$store.state.user;
+        },
+
+
+    }
+}
+</script>
+
+
 <style>
     .navbar {
         padding-left: 1rem;
