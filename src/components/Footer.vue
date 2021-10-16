@@ -23,6 +23,7 @@
           <ul>
             <router-link class="link" :to="{ name: 'Home' }">Home</router-link>
             <router-link v-if="!user" class="link" :to="{ name: 'Login' }">Login In / Register</router-link>
+            <router-link v-if="user" @click="signOut();" class="link" :to="{ name: 'Home' }">Sign Out</router-link>
           </ul>
         </div>
       </div>
@@ -37,14 +38,22 @@
 </template>
 
 <script>
+
+import firebase from "firebase/app";
 export default {
     name: "footer-vue",
     components: {},
     computed: {
         user() {
       return this.$store.state.user;
+        },
     },
-    },
+    methods:{
+        signOut() {
+            firebase.auth().signOut();
+            window.location.reload();
+        },
+    }
 
 }
 </script>

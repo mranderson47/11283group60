@@ -9,11 +9,11 @@ import {library} from "@fortawesome/fontawesome-svg-core";
 
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
-//Import icon
+//Import icons
 import {faUserCircle, faRecycle, faWater, faUmbrellaBeach, faComments} from "@fortawesome/free-solid-svg-icons";
 
 
-//Add icon to library
+//Add icons to library
 library.add(faUserCircle,faRecycle,faWater, faUmbrellaBeach, faComments);
 
 

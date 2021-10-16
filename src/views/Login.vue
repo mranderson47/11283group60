@@ -8,17 +8,14 @@
       <div class="inputs">
         <div class="input">
           <input type="text" placeholder="Email" v-model="email" />
-          <email class="icon" />
         </div>
         <div class="input">
           <input type="password" placeholder="Password" v-model="password" />
-          <password class="icon" />
         </div>
-        <div v-show="error" class="error">{{ this.errorMsg }}</div>
+        <!--<div v-show="error" class="error">{{ this.errorMsg }}</div> -->
       </div>
-      <router-link class="forgot-password" :to="{ name: 'ForgotPassword' }"
-        >Forgot your password?</router-link
-      >
+      <!--<router-link class="forgot-password" :to="{ name: 'ForgotPassword' }"
+        >Forgot your password?</router-link> -->
       <button @click.prevent="signIn">Sign In</button>
     </form>
 </template>
@@ -36,7 +33,7 @@ export default {
   data(){
     return {
       email: "",
-      password: ""
+      password: "",
     };
   },
 methods: {
@@ -46,14 +43,14 @@ methods: {
         .signInWithEmailAndPassword(this.email, this.password)
         .then(() => {
           this.$router.push({ name: "Home" });
-          this.error = false;
-          this.errorMsg = "";
+          //this.error = false;
+          //this.errorMsg = "";
           console.log(firebase.auth().currentUser.uid);
         })
-        .catch((err) => {
-          this.error = true;
-          this.errorMsg = err.message;
-        });
+        //.catch((err) => {
+         // this.error = true;
+       //   this.errorMsg = err.message;
+       // });
     },
 
 
