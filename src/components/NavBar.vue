@@ -7,14 +7,17 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav col-md-11">
-                <li class="nav-item active">
+                <li v-if="!user" class="nav-item active">
                     <a class="nav-link active" href="./login">Log In</a>
                 </li>
-                <li class="nav-item active">
+                <li v-if="!user" class="nav-item active">
                     <a class="nav-link active" href="./register">Register</a>
                 </li>
-                <li class="nav-item active">
-                    <a class="nav-link active" href="./event">Event</a>
+                <li v-if="user" class="nav-item active">
+                    <a class="nav-link active" href="./event">Events</a>
+                </li>
+                <li v-if="user" class="nav-item active">
+                    <a class="nav-link active" @click="signOut">Sign Out</a>
                 </li>
             </ul>
 
@@ -29,7 +32,19 @@
 </template>
 
 <script>
+
+import firebase from "firebase/app";
+
 export default {
+
+    methods:{
+        signOut() {
+            firebase.auth().signOut();
+            window.location.reload();
+        },
+    },
+
+
     computed: {
         //Return the current user session
         user() {
