@@ -1,7 +1,7 @@
 <template>
     <div>
         <form>
-            <div class="row">
+            <div class="row headerTop">
                 <div class="form-group col-md-4">
                     <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="ZipCode" v-model="searchKey">
                 </div>
@@ -41,82 +41,44 @@
                     ></button>
                 </div>
                 <div class="modal-body">
-                    <!--
-                        Create event form
-                        -->
-
-                        <!--
-                    <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="customFile">
-                    <label class="custom-file-label" for="customFile">Choose file</label>
-                    </div>
-                    -->
-
-                
-                <div class="form-group">
-                    <label for="exampleFormControlFile1">Cover Photo</label><br>
-                    <input type="file" class="form-control-file" id="exampleFormControlFile1">
-                </div>
-                
-
-
-                    <form>
-
-                    <div class="form-group">
-                        <label for="eventName">Event Name</label>
-                        <input v-model= "event.name" type="text" class="form-control" id="eventNameInput" aria-describedby="eventName" placeholder="Enter event name">
-                        
-                    </div>
-
-                    <!--
-                        Insert date
-                        -->
-
-                    <div class="form-group">
-                        <label for="zipCode">Location Name</label>
-                        <input v-model= "event.zipCode" type="text" class="form-control" id="zipCode" placeholder="Enter zip code of location">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="eventLocation">Location Name</label>
-                        <input v-model= "event.locationName" type="text" class="form-control" id="locationName" placeholder="Enter name of location">
-                    </div>
-
-                    <div class="form-group">    
-                        <label for="">Google Maps Link of Location</label>
-                        <input v-model= "event.locationLink" type="url" class="form-control" id="locationLink" placeholder="Enter Google Maps link of location">
-                    </div>
-
-                    <div class="form-group">    
-                        <label for="">Purpose</label><br>
-                        <small id="purposeExplanation " class="form-text text-muted">What are you planning to do at this event?</small>
-                    <div class="form-horizontal">
-                        <div class="form-group">
-                            <div class="col-md-6">
-                                <textarea v-model= "event.purpose" class="form-control" rows="3" placeholder="Explain what will be done at this event" required></textarea>
+                    <form novalidate @submit.prevent="onSave">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="exampleFormControlFile1">Cover Photo</label><br>
+                                    <input type="file" class="form-control form-control-file">
+                                </div>
+                                <div class="form-group">
+                                    <label for="eventName">Event Name</label>
+                                    <input v-model= "event.name" type="text" class="form-control" placeholder="Enter event name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="EventDate">Event Date</label>
+                                    <date-picker class="form-control" v-model="event.date" type="datetime"></date-picker>
+                                </div>
+                                <div class="form-group">
+                                    <label for="zipCode">Zip Code</label>
+                                    <input v-model= "event.zipCode" type="text" class="form-control" placeholder="Enter zip code of location">
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    </div>
-                    
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label for="eventLocation">Location Name</label>
+                                    <input v-model= "event.locationName" type="text" class="form-control" placeholder="Enter name of location">
+                                </div>
 
-                    <!--
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Email address</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputPassword1">Password</label>
-                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                    </div>
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                        <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-
-                    -->
+                                <div class="form-group">    
+                                    <label for="">Google Maps Link of Location</label>
+                                    <input v-model= "event.locationLink" type="url" class="form-control" placeholder="Enter Google Maps link of location">
+                                </div>
+                                <div class="form-group">    
+                                    <label for="">Purpose</label><br>
+                                    <small id="purposeExplanation " class="form-text text-muted">What are you planning to do at this event?</small>
+                                        <textarea v-model= "event.purpose" class="form-control" rows="3" placeholder="Explain what will be done at this event" required></textarea>
+                                    
+                                </div>
+                            </div>
+                        </div>                    
                     </form>
 
                 </div>
@@ -147,14 +109,20 @@
 </template>
 
 <script>
+
 import { Modal } from "bootstrap";
+import DatePicker from 'vue2-datepicker';
+import 'vue2-datepicker/index.css';
 export default {
-    
+    components: {
+        DatePicker
+    },
+    name: 'Events',
     data() {
         return {
             searchKey: "",
             activeModal: {},
-            event: {name: "", locationName: "", locationLink: "", purpose: "", zipCode: ""}
+            event: {}
         }
     },
     methods: {
@@ -165,6 +133,7 @@ export default {
             console.log(this.$store.state.user);
         },
         closeModal() {
+            this.event = {};
             if (typeof this.activeModal.hide === "function") {
                 this.activeModal.hide();
             }
@@ -185,12 +154,15 @@ export default {
             console.log("TODO: the event will be saved");
             console.log(this.event);
             this.closeModal();
+        },
+        onSave() {
+            //TODO input validation
         }
     },
 }
 </script>
 <style scoped>
-.row {
+.headerTop {
     margin-top: 1rem;
     width: 60%;
     margin-left: 40%;
@@ -203,7 +175,7 @@ export default {
 }
 
 .modal-body {
-    padding: 30px;
+    padding: 10px;
 
 }
 
@@ -214,13 +186,14 @@ export default {
 }
 
 .form-group {
-    padding: 5px;
-
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
 }
 
 form {
-    padding-top: 30px;
-
+    padding: 1.5rem;
 }
 
 .form-control-file {
