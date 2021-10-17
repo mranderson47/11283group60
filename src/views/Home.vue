@@ -4,15 +4,13 @@
     <!-- SHOW THIS IF WE ARE NOT A USER AKA NOT SIGNED IN-->
     <div v-if="!user" class="updates">
       <h2 >Get started by logging in today.</h2>
-      <h3>test</h3>
-    <router-link class="router-button" to="login">Login Here. <Arrow class="arrow arrow-light" /></router-link>
+    <router-link class="router-button" to="login">Login Here.</router-link>
     </div>
 
     <!-- SHOW THIS IF WE ARE A USER AKA SIGNED IN-->
     <div v-if="user">
-      <h2>User is currently signed in.</h2>
+      <h2>Welcome back, {{$store.state.profileFirstName}}!</h2>
       <button @click="signOut">Sign Out</button>
-      <h5>This currently does nothing</h5>
     </div>
   </div>
 </template>
@@ -28,9 +26,9 @@ export default {
   components: {},
   computed:{
 
-    firstname:{
+    firstName:{
       get(){
-        return this.$store.state.firstname;
+        return this.$store.state.firstName;
       },
     },
     //Returns if we are logged in and authenticated

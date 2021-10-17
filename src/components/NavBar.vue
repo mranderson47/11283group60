@@ -5,20 +5,25 @@
             <span class="navbar-toggler-icon"></span>
 
         </button>
+        
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav col-md-11">
-                <li class="nav-item active">
+                
+                <li v-if="!user" class="nav-item active">
                     <a class="nav-link active" href="./login">Log In</a>
                 </li>
-                <li class="nav-item active">
+                <li v-if="!user" class="nav-item active">
                     <a class="nav-link active" href="./register">Register</a>
                 </li>
-                <li class="nav-item active">
-                    <a class="nav-link active" href="./event">Event</a>
+                <li v-if="user" class="nav-item active">
+                    <a class="nav-link active" href="./event">Events</a>
+                </li>
+                <li v-if="user" class="nav-item active">
+                    <a class="nav-link active" href="./" @click="signOut">Sign Out</a>
                 </li>
             </ul>
 
-            <div class=" user col-md-1">
+            <div v-if="user" class=" user col-md-1">
                 <a href="./profile">
                     <font-awesome-icon icon="user-circle" size="2x"/>
                 </a>
@@ -27,15 +32,53 @@
         </div>
         </nav>
 </template>
-<style>
+
+<script>
+
+import firebase from "firebase/app";
+
+export default {
+
+    methods:{
+        signOut() {
+            firebase.auth().signOut();
+            window.location.reload();
+        },
+    },
+
+
+    computed: {
+        //Return the current user session
+        user() {
+        return this.$store.state.user;
+        },
+
+
+    }
+}
+</script>
+
+
+<style lang="scss" scoped>
     .navbar {
         padding-left: 1rem;
+        
     }
     li {
         padding-left: 1rem;
+        
+        
+        
     }
     .user {
         align-content: right;
     }
+
+    .nav-item active{
+        &:hover{
+            color: rgba(255, 255, 255, 0.384);
+        }
+    }
+
 
 </style>

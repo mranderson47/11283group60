@@ -6,9 +6,14 @@ import Vue2Editor from "vue2-editor";
 import "bootstrap";
 import "bootstrap/scss/bootstrap.scss";
 import {library} from "@fortawesome/fontawesome-svg-core";
-import {faUserCircle, faSave} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
-library.add(faUserCircle, faSave);
+
+//Import icons
+import {faUserCircle, faRecycle, faWater, faUmbrellaBeach, faComments, faSave} from "@fortawesome/free-solid-svg-icons";
+
+//Add icons to library
+library.add(faUserCircle,faRecycle,faWater, faUmbrellaBeach, faComments, faSave);
+
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.use(Vue2Editor);
 
