@@ -26,9 +26,9 @@ export default {
   components: {},
   computed:{
 
-    firstname:{
+    firstName:{
       get(){
-        return this.$store.state.firstname;
+        return this.$store.state.firstName;
       },
     },
     //Returns if we are logged in and authenticated

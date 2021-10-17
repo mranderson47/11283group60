@@ -19,10 +19,6 @@
             <input type="text" class="form-control" id="exampleFormControlInput1" v-model="lastName">
           </div>
           <div class="form-group">
-            <label for="exampleFormControlInput1">User Name</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" v-model="username">
-          </div>
-          <div class="form-group">
             <label for="exampleFormControlInput1">Password</label>
             <input type="password" class="form-control" id="exampleFormControlInput1" v-model="password">
           </div>
@@ -31,9 +27,6 @@
             <button type="button" class="btn btn-primary" @click="register">Sign up</button>
           </div>
         </form>
-        <div class="angle"></div>
-
-        <div class="background"></div>
     </div>
 </template>
 
@@ -53,8 +46,6 @@ export default {
       password: "",
       firstName: "",
       lastName: "",
-      username: "",
-      errorMsg: null,
     };
   },
   methods: {
@@ -68,8 +59,7 @@ export default {
         await dataBase.set({
             email: this.email,
             password: this.password,
-            username: this.username,
-            firstname: this.firstName,
+            firstName: this.firstName,
             lastName: this.lastName
              
         });
