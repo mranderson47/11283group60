@@ -1,3 +1,3 @@
 <template>
-    <p>there's nothing here yet </p>
+    <p>Welcome back, {{$store.state.profileFirstName}} </p>
 </template>

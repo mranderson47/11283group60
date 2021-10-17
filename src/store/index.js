@@ -10,6 +10,8 @@ export default new Vuex.Store({
   state: {
     //These are global states, such as if the user is logged in, etc.
     user: null,
+    profileId: null,
+    profileFirstName: null,
   
   },
   mutations: {
@@ -19,13 +21,23 @@ export default new Vuex.Store({
     updateUser(state, payload) {
       state.user = payload;
     },
+
+    //Set the information from the database to be available to the store based on the user (grabbing data basically)
+    setProfileInfo(state, doc) {
+      state.profileId = doc.id;
+      state.profileFirstName = doc.data().firstname;
+    },
+
   },
   actions: {
     //Actions are functions and are called with dispatch.
 
     //Grab the current userID from the database if they are authorized.
-    async getCurrentUser(user) {
+    async getCurrentUser( {commit}, user) {
       const dataBase = await db.collection("users").doc(firebase.auth().currentUser.uid);
+      const dbResults = await dataBase.get();
+      commit("setProfileInfo", dbResults);
+      
     },
 
     //Test action.

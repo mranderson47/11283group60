@@ -9,7 +9,7 @@
 
     <!-- SHOW THIS IF WE ARE A USER AKA SIGNED IN-->
     <div v-if="user">
-      <h2>You are currently signed in!</h2>
+      <h2>Welcome back, {{$store.state.profileFirstName}}!</h2>
       <button @click="signOut">Sign Out</button>
     </div>
   </div>

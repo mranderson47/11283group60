@@ -3,7 +3,7 @@
     <div class="container">
       <div class="left">
         <div class="col-1">
-          <router-link class="header" :to="{ name: 'Home' }">Beach Avengers</router-link>
+          <router-link class="header" :to="{ name: 'Home' }"><img src="../assets/branding.png" width="250px" height="150px" alt=""/></router-link>
           <ul>
             <li>
               <font-awesome-icon icon="recycle" size="2x"/>
@@ -84,6 +84,7 @@ footer {
       display: flex;
       flex-direction: column;
       align-items: center;
+
       @media (min-width: 800px) {
         flex-direction: row;
         align-items: initial;
@@ -92,6 +93,7 @@ footer {
 
       .header {
         text-align: center;
+        
         font-size: 24px;
         color: #FFF;
         margin-bottom: 16px;
@@ -103,6 +105,10 @@ footer {
         &:hover{
             color: rgba(255, 255, 255, 0.384);
         }
+
+
+        
+
       }
       ul {
         gap: 16px;

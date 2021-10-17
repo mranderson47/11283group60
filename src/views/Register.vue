@@ -73,6 +73,8 @@ export default {
             lastName: this.lastName
              
         });
+        //Push the user to the homepage on signup
+        this.$router.push({name: "Home"});
 
         return;
     }
@@ -86,6 +88,7 @@ export default {
 <style scoped>
   .container-sm {
     width: 50%;
+    padding-bottom: 100px;
   }
   button {
     margin-top: 1.5em;
