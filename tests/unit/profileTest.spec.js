@@ -6,11 +6,29 @@ import realStore from "../../src/store/index";
 Vue.use(Vuex);
 
 describe("Store", () => {
-    it("updateUserState", async () => {
+    it("update User State", async () => {
         realStore.state.user = "abc";
         realStore.commit("updateUser", "cba");               
         
         expect(realStore.state.user).toBe("cba");
+    });
+    it("change User Settings -- First Name", async () => {
+        realStore.state.profileFirstName = "Claudia";
+        realStore.commit("changeFirstName", "Michaela");               
+        
+        expect(realStore.state.profileFirstName).toBe("Michaela");
+    });
+    it("change User Settings -- Last Name", async () => {
+        realStore.state.profileLastName = "Rubio";
+        realStore.commit("changeLastName", "Perez");               
+        
+        expect(realStore.state.profileLastName).toBe("Perez");
+    });
+    it("change User Settings", async () => {
+        realStore.state.profileFirstName = "Claudia";
+        realStore.commit("changeFirstName", "Michaela");               
+        
+        expect(realStore.state.profileFirstName).toBe("Michaela");
     });
 });
 
