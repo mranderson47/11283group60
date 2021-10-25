@@ -1,7 +1,7 @@
 <template>
     <div>
         <form>
-            <div class="row">
+            <div class="row headerTop">
                 <div class="form-group col-md-4">
                     <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="ZipCode" v-model="searchKey">
                 </div>
@@ -41,8 +41,46 @@
                     ></button>
                 </div>
                 <div class="modal-body">
-                    <p> We'll add the form here</p>
-                    
+                    <form novalidate @submit.prevent="onSave">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="exampleFormControlFile1">Cover Photo</label><br>
+                                    <input type="file" class="form-control form-control-file">
+                                </div>
+                                <div class="form-group">
+                                    <label for="eventName">Event Name</label>
+                                    <input v-model= "event.name" type="text" class="form-control" placeholder="Enter event name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="EventDate">Event Date</label>
+                                    <date-picker class="form-control" v-model="event.date" type="datetime"></date-picker>
+                                </div>
+                                <div class="form-group">
+                                    <label for="zipCode">Zip Code</label>
+                                    <input v-model= "event.zipCode" type="text" class="form-control" placeholder="Enter zip code of location">
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label for="eventLocation">Location Name</label>
+                                    <input v-model= "event.locationName" type="text" class="form-control" placeholder="Enter name of location">
+                                </div>
+
+                                <div class="form-group">    
+                                    <label for="">Google Maps Link of Location</label>
+                                    <input v-model= "event.locationLink" type="url" class="form-control" placeholder="Enter Google Maps link of location">
+                                </div>
+                                <div class="form-group">    
+                                    <label for="">Purpose</label><br>
+                                    <small id="purposeExplanation " class="form-text text-muted">What are you planning to do at this event?</small>
+                                        <textarea v-model= "event.purpose" class="form-control" rows="3" placeholder="Explain what will be done at this event" required></textarea>
+                                    
+                                </div>
+                            </div>
+                        </div>                    
+                    </form>
+
                 </div>
                 <div class="modal-footer">
                     <button
@@ -71,13 +109,20 @@
 </template>
 
 <script>
+
 import { Modal } from "bootstrap";
+import DatePicker from 'vue2-datepicker';
+import 'vue2-datepicker/index.css';
 export default {
-    
+    components: {
+        DatePicker
+    },
+    name: 'Events',
     data() {
         return {
             searchKey: "",
             activeModal: {},
+            event: {}
         }
     },
     methods: {
@@ -88,6 +133,7 @@ export default {
             console.log(this.$store.state.user);
         },
         closeModal() {
+            this.event = {};
             if (typeof this.activeModal.hide === "function") {
                 this.activeModal.hide();
             }
@@ -106,15 +152,57 @@ export default {
         },
         saveEvent() {
             console.log("TODO: the event will be saved");
+            console.log(this.event);
             this.closeModal();
+        },
+        onSave() {
+            //TODO input validation
         }
     },
 }
 </script>
 <style scoped>
-.row {
+.headerTop {
     margin-top: 1rem;
     width: 60%;
     margin-left: 40%;
 }
+
+.custom-file {
+    padding: 10px;
+    box-shadow: 10px 10px 20px #888888;
+
+}
+
+.modal-body {
+    padding: 10px;
+
+}
+
+.form-control {
+    padding: 5px;
+    box-shadow: 5px 5px 10px #888888;
+
+}
+
+.form-group {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+form {
+    padding: 1.5rem;
+}
+
+.form-control-file {
+    box-shadow: 5px 5px 10px #888888;
+
+}
+
+.form-horizontal {
+
+}
+
 </style>
