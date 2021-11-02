@@ -3,7 +3,7 @@
         <form>
             <div class="row headerTop">
                 <div class="form-group col-md-4">
-                    <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="ZipCode" v-model="searchKey">
+                    <input type="text" class="form-control" id="zip" placeholder="ZipCode" v-model="searchKey">
                 </div>
                 <div class="form-group col-md-4">
                     <button type="button" class="btn btn-primary" @click="search">Search</button>
@@ -127,7 +127,13 @@ export default {
     },
     methods: {
         search() {
-          
+            const zipRegex = /^[0-9]{5}$/;
+            const input = document.getElementById(`zip`);
+            if (!zipRegex.test(this.searchKey)) {
+                input.classList.add("is-invalid");
+                return;
+            }
+            input.classList.remove("is-invalid");
             console.log("click");
             this.$store.dispatch("action1");
             console.log(this.$store.state.user);
@@ -201,8 +207,5 @@ form {
 
 }
 
-.form-horizontal {
-
-}
 
 </style>
