@@ -6,7 +6,7 @@ import realStore from "../../src/store/index";
 Vue.use(Vuex);
 
 describe("Store", () => {
-    it("update User State", async () => {
+    it("update User State - user id/signed in", async () => {
         realStore.state.user = "abc";
         realStore.commit("updateUser", "cba");               
         
@@ -24,15 +24,33 @@ describe("Store", () => {
         
         expect(realStore.state.profileLastName).toBe("Perez");
     });
-    it("change User Settings", async () => {
+    it("change User Settings -- change profile info", async () => {
         realStore.state.profileFirstName = "Claudia";
         realStore.commit("changeFirstName", "Michaela");               
         
         expect(realStore.state.profileFirstName).toBe("Michaela");
     });
+    it("Set ID Tokent", async() => {
+        realStore.state.token = null;
+        realStore.commit("setIdToken", "fjoiajf");
+
+        expect(realStore.state.token).toBe("fjoiajf");
+    });
+    it("Clear all user information", async() => {
+        realStore.state.token = "123";
+        realStore.state.profileFirstName = "claudia";
+        realStore.state.profileLastName = "rubio";
+        realStore.state.user = "abc"
+        realStore.commit("clearUser");
+
+        expect(realStore.state.token).toBe(null);
+        expect(realStore.state.profileFirstName).toBe(null);
+        expect(realStore.state.profileLastName).toBe(null);
+        expect(realStore.state.user).toBe(null);
+    })
 });
 
-describe("Event Component", () => {
+describe("Profile Component", () => {
     let store;
     beforeEach(() => {
         //store =  new Vuex.Store({
