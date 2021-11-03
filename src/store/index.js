@@ -15,6 +15,7 @@ export default new Vuex.Store({
     profileFirstName: null,
     profileLastName: null,
     token: null,
+    events: [],
   },
   mutations: {
     //Mutations change states to the payload, called using commit
