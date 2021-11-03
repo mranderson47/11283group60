@@ -21,7 +21,18 @@
             </div>
             
         </form>
-
+        <div class="row event-container">
+            <div class="col">
+                <div v-for="(event, index) in eventsFirstHalf" :key="index"> 
+                    <event-card :event="event" />
+                </div>
+            </div>
+            <div class="col">
+                <div v-for="(event, index) in eventsSecondHalf" :key="index">
+                     <event-card :event="event" />
+                </div>
+            </div>
+        </div>
 
         <div
         class="modal fade"
@@ -113,9 +124,21 @@
 import { Modal } from "bootstrap";
 import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/index.css';
+import { mapState } from "vuex";
+import EventCard from "../components/EventCard.vue"
 export default {
     components: {
-        DatePicker
+        DatePicker,
+        EventCard
+    },
+    computed: {
+        ...mapState(["events"]),
+        eventsFirstHalf() {
+            return this.events.slice(0, this.events.length/2);
+        },
+        eventsSecondHalf() {
+            return this.events.slice(this.events.length/2);
+        }
     },
     name: 'Events',
     data() {
@@ -158,11 +181,11 @@ export default {
         },
         saveEvent() {
             console.log("TODO: the event will be saved");
-            console.log(this.event);
+            this.events.push(this.event);
+            console.log("store: "+this.$store.state.events);
             this.closeModal();
         },
         onSave() {
-            //TODO input validation
         }
     },
 }
@@ -179,7 +202,10 @@ export default {
     box-shadow: 10px 10px 20px #888888;
 
 }
-
+.event-container {
+    width: 60%;
+    margin-left: 20%;
+}
 .modal-body {
     padding: 10px;
 
