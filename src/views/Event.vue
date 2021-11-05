@@ -3,7 +3,7 @@
         <form>
             <div class="row headerTop">
                 <div class="form-group col-md-4">
-                    <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="ZipCode" v-model="searchKey">
+                    <input type="text" class="form-control" id="zip" placeholder="ZipCode" v-model="searchKey">
                 </div>
                 <div class="form-group col-md-4">
                     <button type="button" class="btn btn-primary" @click="search">Search</button>
@@ -21,7 +21,18 @@
             </div>
             
         </form>
-
+        <div class="row event-container">
+            <div class="col">
+                <div v-for="(event, index) in eventsFirstHalf" :key="index"> 
+                    <event-card :event="event" />
+                </div>
+            </div>
+            <div class="col">
+                <div v-for="(event, index) in eventsSecondHalf" :key="index">
+                     <event-card :event="event" />
+                </div>
+            </div>
+        </div>
 
         <div
         class="modal fade"
@@ -113,9 +124,21 @@
 import { Modal } from "bootstrap";
 import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/index.css';
+import { mapState } from "vuex";
+import EventCard from "../components/EventCard.vue"
 export default {
     components: {
-        DatePicker
+        DatePicker,
+        EventCard
+    },
+    computed: {
+        ...mapState(["events"]),
+        eventsFirstHalf() {
+            return this.events.slice(0, Math.ceil(this.events.length/2.));
+        },
+        eventsSecondHalf() {
+            return this.events.slice(Math.ceil(this.events.length/2.));
+        }
     },
     name: 'Events',
     data() {
@@ -127,7 +150,13 @@ export default {
     },
     methods: {
         search() {
-          
+            const zipRegex = /^[0-9]{5}$/;
+            const input = document.getElementById(`zip`);
+            if (!zipRegex.test(this.searchKey)) {
+                input.classList.add("is-invalid");
+                return;
+            }
+            input.classList.remove("is-invalid");
             console.log("click");
             this.$store.dispatch("action1");
             console.log(this.$store.state.user);
@@ -151,12 +180,10 @@ export default {
             return modalElem;
         },
         saveEvent() {
-            console.log("TODO: the event will be saved");
-            console.log(this.event);
+            this.$store.dispatch("saveEventToDB", this.event);
             this.closeModal();
         },
         onSave() {
-            //TODO input validation
         }
     },
 }
@@ -173,7 +200,10 @@ export default {
     box-shadow: 10px 10px 20px #888888;
 
 }
-
+.event-container {
+    width: 60%;
+    margin-left: 20%;
+}
 .modal-body {
     padding: 10px;
 
@@ -201,8 +231,5 @@ form {
 
 }
 
-.form-horizontal {
-
-}
 
 </style>

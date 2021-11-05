@@ -15,6 +15,7 @@ export default new Vuex.Store({
     profileFirstName: null,
     profileLastName: null,
     token: null,
+    events: [],
   },
   mutations: {
     //Mutations change states to the payload, called using commit
@@ -25,6 +26,10 @@ export default new Vuex.Store({
     },
     setIdToken(state, playload) {
       state.token = playload;
+    },
+
+    addEvent(state, payload) {
+      state.events.push(payload);
     },
 
     //Request to change the first name of the profile
@@ -70,6 +75,36 @@ export default new Vuex.Store({
         firstName: state.profileFirstName,
         lastName: state.profileLastName,
       });
+    },
+    async getEvents({commit}) {
+      console.log("HII");
+      const eventsRef = await db.collection("events");
+      var querry = eventsRef.get()
+      .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+              // doc.data() is never undefined for query doc snapshots
+              commit("addEvent", doc.data());
+              console.log(doc.id, " => ", doc.data());
+          });
+      })
+      .catch((error) => {
+          console.log("Error getting documents: ", error);
+      });
+    },
+    async saveEventToDB({commit}, event) {
+      const userRef = await db.collection("users").doc(this.state.profileId);
+      var eventToSave = {
+        creator: userRef,
+        date: event.date.getTime(),
+        description: event.purpose,
+        title: event.name,
+        zipcode: event.zipCode,
+        locationName: event.locationName,
+        locationLink: event.locationLink
+      }
+      const eventsRef = db.collection("events").doc();
+      await eventsRef.set(eventToSave);
+      commit("addEvent", eventToSave);
     },
     verifyUser({commit}, token) { //call this function before any changes to db 
       var decoded = jwt_decode(token);

@@ -7,6 +7,7 @@ import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
 import Profile from "../views/Profile.vue";
 import Event from "../views/Event.vue";
+import store from "../store/index";
 
 Vue.use(VueRouter);
 
@@ -30,6 +31,10 @@ const routes = [
     path: "/event",
     name: "Event",
     component: Event,
+    beforeEnter: (to, from, next) => {
+      store.dispatch("getEvents");
+      next();
+    }
   },
 
     //Route for Register view
