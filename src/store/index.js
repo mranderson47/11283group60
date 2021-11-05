@@ -92,20 +92,19 @@ export default new Vuex.Store({
       });
     },
     async saveEventToDB({commit}, event) {
-      console.log(event.date.getTime());
       const userRef = await db.collection("users").doc(this.state.profileId);
-      
-      const eventsRef = db.collection("events").doc();
-      await eventsRef.set({
+      var eventToSave = {
         creator: userRef,
         date: event.date.getTime(),
         description: event.purpose,
         title: event.name,
-        zipcode: parseInt(event.zipcode),
+        zipcode: event.zipCode,
         locationName: event.locationName,
         locationLink: event.locationLink
-      });
-      commit("addEvent", event);
+      }
+      const eventsRef = db.collection("events").doc();
+      await eventsRef.set(eventToSave);
+      commit("addEvent", eventToSave);
     },
     verifyUser({commit}, token) { //call this function before any changes to db 
       var decoded = jwt_decode(token);
