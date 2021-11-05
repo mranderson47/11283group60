@@ -134,10 +134,10 @@ export default {
     computed: {
         ...mapState(["events"]),
         eventsFirstHalf() {
-            return this.events.slice(0, this.events.length/2);
+            return this.events.slice(0, Math.ceil(this.events.length/2.));
         },
         eventsSecondHalf() {
-            return this.events.slice(this.events.length/2);
+            return this.events.slice(Math.ceil(this.events.length/2.));
         }
     },
     name: 'Events',
@@ -180,9 +180,7 @@ export default {
             return modalElem;
         },
         saveEvent() {
-            console.log("TODO: the event will be saved");
-            this.events.push(this.event);
-            console.log("store: "+this.$store.state.events);
+            this.$store.dispatch("saveEventToDB", this.event);
             this.closeModal();
         },
         onSave() {
