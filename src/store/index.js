@@ -28,6 +28,10 @@ export default new Vuex.Store({
       state.token = playload;
     },
 
+    addEvent(state, payload) {
+      state.events.push(payload);
+    },
+
     //Request to change the first name of the profile
     changeFirstName(state, payload) {
       state.profileFirstName = payload;
@@ -71,6 +75,37 @@ export default new Vuex.Store({
         firstName: state.profileFirstName,
         lastName: state.profileLastName,
       });
+    },
+    async getEvents({commit}) {
+      console.log("HII");
+      const eventsRef = await db.collection("events");
+      var querry = eventsRef.get()
+      .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+              // doc.data() is never undefined for query doc snapshots
+              commit("addEvent", doc.data());
+              console.log(doc.id, " => ", doc.data());
+          });
+      })
+      .catch((error) => {
+          console.log("Error getting documents: ", error);
+      });
+    },
+    async saveEventToDB({commit}, event) {
+      console.log(event.date.getTime());
+      const userRef = await db.collection("users").doc(this.state.profileId);
+      
+      const eventsRef = db.collection("events").doc();
+      await eventsRef.set({
+        creator: userRef,
+        date: event.date.getTime(),
+        description: event.purpose,
+        title: event.name,
+        zipcode: parseInt(event.zipcode),
+        locationName: event.locationName,
+        locationLink: event.locationLink
+      });
+      commit("addEvent", event);
     },
     verifyUser({commit}, token) { //call this function before any changes to db 
       var decoded = jwt_decode(token);
