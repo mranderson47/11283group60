@@ -28,11 +28,12 @@ export default {
     //Update the user state.
     firebase.auth().onAuthStateChanged((user) => {
       this.$store.commit("updateUser", user);
-      if(user){
-      this.$store.dispatch("getCurrentUser", user);
+      if (user) {
+        this.$store.dispatch("getCurrentUser", user);
+        this.$store.dispatch("getEvents");
       }
     });
-
+    
   },
   mounted() {},
   methods: {},

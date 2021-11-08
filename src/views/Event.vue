@@ -52,7 +52,26 @@
                     ></button>
                 </div>
                 <div class="modal-body">
-                    <form novalidate @submit.prevent="onSave">
+                    <div
+                    ref="messages"
+                    v-if="errorMessages.length"
+                    class="alert alert-danger fade show"
+                    >
+                    <span
+                        v-for="(msg, index) in errorMessages"
+                        :key="index"
+                        id="message"
+                        v-html="msg"
+                    ></span>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        @click="errorMessages = []"
+                        data-bs-dismiss="alert"
+                        aria-label="Close"
+                    ></button>
+                    </div>
+                    <form novalidate>
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
@@ -60,32 +79,32 @@
                                     <input type="file" class="form-control form-control-file">
                                 </div>
                                 <div class="form-group">
-                                    <label for="eventName">Event Name</label>
-                                    <input v-model= "event.name" type="text" class="form-control" placeholder="Enter event name">
+                                    <label for="eventName">Event Name<span class="requierd-span">*</span></label>
+                                    <input v-model="event.name" type="text" class="form-control" placeholder="Enter event name">
                                 </div>
                                 <div class="form-group">
-                                    <label for="EventDate">Event Date</label>
+                                    <label for="EventDate">Event Date<span class="requierd-span">*</span></label>
                                     <date-picker class="form-control" v-model="event.date" type="datetime"></date-picker>
                                 </div>
                                 <div class="form-group">
-                                    <label for="zipCode">Zip Code</label>
-                                    <input v-model= "event.zipCode" type="text" class="form-control" placeholder="Enter zip code of location">
+                                    <label for="zipCode">Zip Code<span class="requierd-span">*</span></label>
+                                    <input v-model="event.zipCode" type="text" class="form-control" placeholder="Enter zip code of location">
                                 </div>
                             </div>
                             <div class="col-md-8">
                                 <div class="form-group">
-                                    <label for="eventLocation">Location Name</label>
-                                    <input v-model= "event.locationName" type="text" class="form-control" placeholder="Enter name of location">
+                                    <label for="eventLocation">Location Name<span class="requierd-span">*</span></label>
+                                    <input v-model="event.locationName" type="text" class="form-control" placeholder="Enter name of location">
                                 </div>
 
                                 <div class="form-group">    
                                     <label for="">Google Maps Link of Location</label>
-                                    <input v-model= "event.locationLink" type="url" class="form-control" placeholder="Enter Google Maps link of location">
+                                    <input v-model="event.locationLink" type="url" class="form-control" placeholder="Enter Google Maps link of location">
                                 </div>
                                 <div class="form-group">    
                                     <label for="">Purpose</label><br>
                                     <small id="purposeExplanation " class="form-text text-muted">What are you planning to do at this event?</small>
-                                        <textarea v-model= "event.purpose" class="form-control" rows="3" placeholder="Explain what will be done at this event" required></textarea>
+                                        <textarea v-model="event.purpose" class="form-control" rows="3" placeholder="Explain what will be done at this event" required></textarea>
                                     
                                 </div>
                             </div>
@@ -102,12 +121,12 @@
                         Close
                     </button>
                     <button
-                        type="button"
+                        type="submit"
                         class="btn btn-primary"
                         data-bs-toggle="tooltip"
                         data-bs-placement="bottom"
                         title="Add a new card"
-                        @click="saveEvent"
+                        @click="onSave()"
                     >
                         <font-awesome-icon icon="save" />&nbsp;Save
                     </button>
@@ -145,7 +164,8 @@ export default {
         return {
             searchKey: "",
             activeModal: {},
-            event: {}
+            event: {},
+            errorMessages: []
         }
     },
     methods: {
@@ -184,6 +204,32 @@ export default {
             this.closeModal();
         },
         onSave() {
+            //input validation goes here
+            this.errorMessages = [];
+            const webAddress = /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)$/;
+            const zipRegex = /^[0-9]{5}$/;
+            if (!this.event.name) {
+                this.errorMessages.push("<b>Name</b> is required.\n");
+            }
+            if (!this.event.date) {
+                this.errorMessages.push("<b>Date</b> is required.\n");
+            }
+            if (!this.event.locationName) {
+                this.errorMessages.push("<b>Location Name</b> is required.\n");
+            }
+            if (!this.event.zipCode) {
+                this.errorMessages.push("<b>ZipCode</b> is required.\n");
+            }
+            else if (!zipRegex.test(this.event.zipCode)) {
+                this.errorMessages.push("<b>ZipCode</b> is not valid");
+            }
+            if (this.event.locationLink && !webAddress.test(this.event.locationLink)) {
+                this.errorMessages.push("<b>Location Link</b> must be a web address.\n");
+            }
+
+            if (this.errorMessages.length === 0) {
+                this.saveEvent();
+            }
         }
     },
 }
@@ -201,13 +247,16 @@ export default {
 
 }
 .event-container {
-    width: 60%;
-    margin-left: 20%;
+    width: 80%;
+    margin-left: 10%;
 }
 .modal-body {
     padding: 10px;
 
 }
+.requierd-span {
+    color: red;
+  }
 
 .form-control {
     padding: 5px;
