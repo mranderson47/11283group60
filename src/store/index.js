@@ -79,10 +79,6 @@ export default new Vuex.Store({
         lastName: state.profileLastName,
       });
     },
-    async getUserEvents({commit}) {
-      console.log(this.state.profileId);
-      
-    },
     async getEvents({commit}) {
       const eventsRef = await db.collection("events");
       var querry = eventsRef.get()
