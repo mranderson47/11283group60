@@ -31,10 +31,7 @@ const routes = [
     path: "/event",
     name: "Event",
     component: Event,
-    beforeEnter: (to, from, next) => {
-      store.dispatch("getEvents");
-      next();
-    }
+    
   },
 
     //Route for Register view

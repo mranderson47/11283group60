@@ -16,6 +16,7 @@ export default new Vuex.Store({
     profileLastName: null,
     token: null,
     events: [],
+    userEvents: [],
   },
   mutations: {
     //Mutations change states to the payload, called using commit
@@ -30,6 +31,8 @@ export default new Vuex.Store({
 
     addEvent(state, payload) {
       state.events.push(payload);
+      if (payload.creator.id == state.profileId)
+        state.userEvents.push(payload);
     },
 
     //Request to change the first name of the profile
@@ -76,15 +79,17 @@ export default new Vuex.Store({
         lastName: state.profileLastName,
       });
     },
+    async getUserEvents({commit}) {
+      console.log(this.state.profileId);
+      
+    },
     async getEvents({commit}) {
-      console.log("HII");
       const eventsRef = await db.collection("events");
       var querry = eventsRef.get()
       .then((querySnapshot) => {
           querySnapshot.forEach((doc) => {
               // doc.data() is never undefined for query doc snapshots
               commit("addEvent", doc.data());
-              console.log(doc.id, " => ", doc.data());
           });
       })
       .catch((error) => {
@@ -96,11 +101,16 @@ export default new Vuex.Store({
       var eventToSave = {
         creator: userRef,
         date: event.date.getTime(),
-        description: event.purpose,
         title: event.name,
-        zipcode: event.zipCode,
+        zipcode: parseInt(event.zipCode),
         locationName: event.locationName,
-        locationLink: event.locationLink
+        creatorName: this.state.profileFirstName
+      }
+      if (event.purpose) {
+        eventToSave.description = event.purpose;
+      }
+      if (event.locationLink) {
+        eventToSave.locationLink = event.locationLink;
       }
       const eventsRef = db.collection("events").doc();
       await eventsRef.set(eventToSave);
