@@ -4,7 +4,10 @@
   <div class="col-md-5">
     <img class="card-img-top" src="https://clubsolaris.com/imgs/tips-to-take-care-of-the-beach-during-your-vacations/beach-sea-cancun-sun.png" alt="Card image cap"> <!-- Replace the src with the photo from the database for the event -->
   </div>
-  <div class="col-md-7 card-body">
+  <div :class="{
+          'col-md-7 card-body yours': canEdit,
+          'col-md-7 card-body': !canEdit,
+        }">
     <h4>{{event.title}}</h4> 
     <span><b>Location: </b>{{event.locationName}} | <b>zip:</b> {{event.zipcode}} </span>
     <br/>
@@ -15,15 +18,32 @@
     <span v-if="event.description"> <b> Purpose: </b> {{event.description}} </span>
     <br v-if="event.description"/>
     <span> <b> By: </b> {{event.creatorName}} </span>
+    <br/>
+    <div class="icons">
+        <font-awesome-icon v-if="isLiked" v-on:click="likeDislike()" :icon="['fas', 'heart']" class="heart"/> &nbsp;
+        <font-awesome-icon v-else v-on:click="likeDislike()" :icon="['far', 'heart']" class="heart"/> &nbsp;
+        
+        <font-awesome-icon v-if="isSaved" v-on:click="saveOrUnsave()" icon="thumbtack" class="save"/> &nbsp;
+        <font-awesome-icon v-else v-on:click="saveOrUnsave()" icon="thumbtack" class="save"/>&nbsp;
+
+        <font-awesome-icon v-if="canEdit" v-on:click="edit()" :icon="['fas', 'edit']" class="edit"/>&nbsp;
+        <font-awesome-icon v-if="canEdit" v-on:click="remove()" :icon="['fas', 'trash']" class="trash"/>&nbsp;
+
+    </div>
   </div>
+  <event-form :ref="`event${event.id}`" :editEvent="event" v-if="canEdit"/>
 </div>
 
 </template>
 <script>
+import EventForm from "./EventForm.vue";
 
 export default {
     props: {
         event: null
+    },
+    components: {
+        EventForm
     },
     computed: {
         formattedDate() {
@@ -39,16 +59,32 @@ export default {
             let minute = date.getMinutes();
 
             return `${month}/${day}/${year} ${hour}:${minute}`;
-        }
+        },
+    },
+    created() {
+        this.canEdit = (this.$store.state.userEvents.findIndex((it) => it.id == this.event.id) != -1);
     },
     data() {
         return {
-            
+            isLiked: false,
+            isSaved: true,
+            canEdit: false
         }
     },
     methods: {
-        like() {
-            //TODO later
+        likeDislike() {
+            this.isLiked = !this.isLiked;
+        },
+        saveOrUnsave() {
+            this.isSaved = !this.isSaved;
+        },
+        edit() {
+            var id = this.event.id;
+            //open edit modal
+            this.$refs[`event${this.event.id}`].openModal();
+        },
+        remove() {
+
         }
     },
 }
@@ -64,5 +100,17 @@ export default {
         padding: 2px;
         height: 100%;
         width: 100%;
+    }
+    .heart:hover {
+        color:red;
+    }
+    .heart {
+        color: pink;
+    }
+    .icons {
+        margin-top: 1rem;
+    }
+    .edit:hover {
+        color:cornflowerblue;
     }
 </style>

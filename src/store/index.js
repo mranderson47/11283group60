@@ -84,8 +84,10 @@ export default new Vuex.Store({
       var querry = eventsRef.get()
       .then((querySnapshot) => {
           querySnapshot.forEach((doc) => {
+              var eventToSave = doc.data();
+              eventToSave.id = doc.id;
               // doc.data() is never undefined for query doc snapshots
-              commit("addEvent", doc.data());
+              commit("addEvent", eventToSave);
           });
       })
       .catch((error) => {
@@ -97,19 +99,20 @@ export default new Vuex.Store({
       var eventToSave = {
         creator: userRef,
         date: event.date.getTime(),
-        title: event.name,
-        zipcode: parseInt(event.zipCode),
+        title: event.title,
+        zipcode: parseInt(event.zipcode),
         locationName: event.locationName,
         creatorName: this.state.profileFirstName
       }
-      if (event.purpose) {
-        eventToSave.description = event.purpose;
+      if (event.description) {
+        eventToSave.description = event.description;
       }
       if (event.locationLink) {
         eventToSave.locationLink = event.locationLink;
       }
       const eventsRef = db.collection("events").doc();
       await eventsRef.set(eventToSave);
+      eventToSave.id = eventsRef.id;
       commit("addEvent", eventToSave);
     },
     verifyUser({commit}, token) { //call this function before any changes to db 

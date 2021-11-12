@@ -9,10 +9,11 @@ import {library} from "@fortawesome/fontawesome-svg-core";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
 //Import icons
-import {faUserCircle, faRecycle, faWater, faUmbrellaBeach, faComments, faSave, faCalendar, faHeart} from "@fortawesome/free-solid-svg-icons";
+import {faUserCircle, faRecycle, faWater, faUmbrellaBeach, faComments, faSave, faCalendar, faHeart as fasHeart, faThumbtack, faEdit, faTrash} from "@fortawesome/free-solid-svg-icons";
+import {faHeart as farHeart} from "@fortawesome/free-regular-svg-icons";
 
 //Add icons to library
-library.add(faUserCircle,faRecycle,faWater, faUmbrellaBeach, faComments, faSave, faCalendar, faHeart);
+library.add(faUserCircle,faRecycle,faWater, faUmbrellaBeach, faComments, faSave, faCalendar, fasHeart, farHeart, faThumbtack, faEdit, faTrash);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.use(Vue2Editor);
