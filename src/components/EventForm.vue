@@ -9,7 +9,8 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">CREATE EVENT</h5>
+                    <h5 v-if="!event.id" class="modal-title" id="exampleModalLabel">CREATE EVENT</h5>
+                    <h5 v-else class="modal-title" id="exampleModalLabel">EDIT EVENT</h5>
                     <button
                     type="button"
                     class="btn-close"
@@ -124,6 +125,7 @@ export default {
     components: {
         DatePicker,
     },
+    emits:["modify-event"],
     data() {
         return {
             event: {},
@@ -133,7 +135,6 @@ export default {
     },
     methods: {
         closeModal() {
-            this.event = {};
             if (typeof this.activeModal.hide === "function") {
                 this.activeModal.hide();
             }
@@ -151,7 +152,12 @@ export default {
             return modalElem;
         },
         saveEvent() {
-            this.$store.dispatch("saveEventToDB", this.event);
+            if (!this.event.id)
+                this.$store.dispatch("saveEventToDB", Object.assign({}, this.event));
+            else {
+                this.$store.dispatch("editEvent", Object.assign({}, this.event));
+                this.$emit("modify-event", this.event);
+            }
             this.closeModal();
         },
         onSave() {

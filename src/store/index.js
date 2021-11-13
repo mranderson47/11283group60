@@ -34,6 +34,14 @@ export default new Vuex.Store({
       if (payload.creator.id == state.profileId)
         state.userEvents.push(payload);
     },
+    editEvent(state, payload) {
+      let index = state.events.findIndex((it) => it.id = payload.id);
+      state.events[index] = payload;
+      index = state.userEvents.findIndex((it) => it.id = payload.id);
+      if (index != -1) {
+        state.userEvents[index] = payload;
+      }
+    },
 
     //Request to change the first name of the profile
     changeFirstName(state, payload) {
@@ -114,6 +122,20 @@ export default new Vuex.Store({
       await eventsRef.set(eventToSave);
       eventToSave.id = eventsRef.id;
       commit("addEvent", eventToSave);
+    },
+    async editEvent({commit}, event) {
+      event.date = event.date.getTime();
+      event.zipcode = parseInt(event.zipcode);
+      let id = event.id;
+      delete event.id;
+      try {
+        await db.collection("events").doc(id).update(event);
+      }
+      catch (error) {
+        console.log(error);
+      }
+      event.id = id;
+      commit("editEvent", event);
     },
     verifyUser({commit}, token) { //call this function before any changes to db 
       var decoded = jwt_decode(token);

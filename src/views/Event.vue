@@ -1,27 +1,41 @@
 <template>
-    <div>
+    <div class="event-container">
+        <div class="row">
+            <div class="form-group col-md-10">
+                <h1> EVENTS</h1>
+            </div>
+            <div class="form-group col-md-2">
+                <button
+                    type="button"
+                    title="Create Event"
+                    class="btn btn-success header-btn"
+                    @click="$refs.eventF.openModal()"
+                >
+                CREATE EVENT
+                </button>
+            </div>
+        </div>
         <form>
-            <div class="row headerTop">
-                <div class="form-group col-md-4">
-                    <input type="text" class="form-control" id="zip" placeholder="ZipCode" v-model="searchKey">
-                </div>
-                <div class="form-group col-md-4">
-                    <button type="button" class="btn btn-primary" @click="search">Search</button>
-                </div>
-                <div class="form-group col-md-4">
-                    <button
-                        type="button"
-                        title="Create Event"
-                        class="btn btn-primary"
-                        @click="$refs.eventF.openModal()"
-                    >
-                    CREATE EVENT
-                    </button>
-                </div>
+            <div class="row">
+                    <div class="form-group col-md-2">
+                        <label>Search After: </label>
+                        <date-picker class="form-control" type="datetime"></date-picker>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Search Before: </label>
+                        <date-picker class="form-control" type="datetime"></date-picker>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>ZipCode: </label>
+                        <input type="text" class="form-control" id="zip" v-model="searchKey">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <button type="button" class="btn btn-secondary header-btn" @click="search">FILTER</button>
+                    </div>
             </div>
             
         </form>
-        <div class="row event-container">
+        <div class="row">
             <div class="col">
                 <div v-for="(event, index) in eventsFirstHalf" :key="index"> 
                     <event-card :event="event" />
@@ -41,13 +55,15 @@
 <script>
 
 import 'vue2-datepicker/index.css';
+import DatePicker from 'vue2-datepicker';
 import { mapState } from "vuex";
 import EventCard from "../components/EventCard.vue"
 import EventForm from "../components/EventForm.vue"
 export default {
     components: {
         EventCard,
-        EventForm
+        EventForm,
+        DatePicker
     },
     computed: {
         ...mapState(["events"]),
@@ -83,8 +99,7 @@ export default {
 <style scoped>
 .headerTop {
     margin-top: 1rem;
-    width: 60%;
-    margin-left: 40%;
+    margin-left: 10%;
 }
 
 .custom-file {
@@ -93,6 +108,7 @@ export default {
 
 }
 .event-container {
+    margin-top:2rem;
     width: 80%;
     margin-left: 10%;
 }
@@ -103,11 +119,8 @@ export default {
 .requierd-span {
     color: red;
   }
-
-.form-control {
-    padding: 5px;
-    box-shadow: 5px 5px 10px #888888;
-
+.mx-datepicker {
+    padding:0px !important;
 }
 
 .form-group {
@@ -119,6 +132,16 @@ export default {
 
 form {
     padding: 1.5rem;
+}
+.filter {
+    border-style:solid; 
+    border-radius:20px; 
+    border-color:rgb(204, 204, 204);
+    padding-top:0.5rem;
+    padding-bottom: 0.5rem;
+}
+.header-btn {
+    margin-top:24px;
 }
 
 .form-control-file {

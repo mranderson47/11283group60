@@ -4,10 +4,7 @@
   <div class="col-md-5">
     <img class="card-img-top" src="https://clubsolaris.com/imgs/tips-to-take-care-of-the-beach-during-your-vacations/beach-sea-cancun-sun.png" alt="Card image cap"> <!-- Replace the src with the photo from the database for the event -->
   </div>
-  <div :class="{
-          'col-md-7 card-body yours': canEdit,
-          'col-md-7 card-body': !canEdit,
-        }">
+  <div class="col-md-7 card-body yours">
     <h4>{{event.title}}</h4> 
     <span><b>Location: </b>{{event.locationName}} | <b>zip:</b> {{event.zipcode}} </span>
     <br/>
@@ -20,18 +17,24 @@
     <span> <b> By: </b> {{event.creatorName}} </span>
     <br/>
     <div class="icons">
-        <font-awesome-icon v-if="isLiked" v-on:click="likeDislike()" :icon="['fas', 'heart']" class="heart"/> &nbsp;
-        <font-awesome-icon v-else v-on:click="likeDislike()" :icon="['far', 'heart']" class="heart"/> &nbsp;
+        <em v-if="canEdit" id="your-label">This is your event<br/></em>
+        <font-awesome-icon v-if="isLiked" v-on:click="likeDislike()" :icon="['fas', 'heart']" class="heart"/> &nbsp;&nbsp;
+        <font-awesome-icon v-else v-on:click="likeDislike()" :icon="['far', 'heart']" class="heart"/> &nbsp;&nbsp;
         
-        <font-awesome-icon v-if="isSaved" v-on:click="saveOrUnsave()" icon="thumbtack" class="save"/> &nbsp;
-        <font-awesome-icon v-else v-on:click="saveOrUnsave()" icon="thumbtack" class="save"/>&nbsp;
+        <font-awesome-icon v-if="isSaved" v-on:click="saveOrUnsave()" :icon="['far', 'bookmark']" class=" icon"/> &nbsp;&nbsp;
+        <font-awesome-icon v-else v-on:click="saveOrUnsave()" :icon="['fas', 'bookmark']" class="icon"/>&nbsp;&nbsp;
 
-        <font-awesome-icon v-if="canEdit" v-on:click="edit()" :icon="['fas', 'edit']" class="edit"/>&nbsp;
-        <font-awesome-icon v-if="canEdit" v-on:click="remove()" :icon="['fas', 'trash']" class="trash"/>&nbsp;
+        <font-awesome-icon v-if="canEdit" v-on:click="edit()" :icon="['fas', 'edit']" class="icon"/>&nbsp;&nbsp;
+        <font-awesome-icon v-if="canEdit" v-on:click="remove()" :icon="['fas', 'trash']" class="icon"/>&nbsp;&nbsp;
 
     </div>
   </div>
-  <event-form :ref="`event${event.id}`" :editEvent="event" v-if="canEdit"/>
+  <event-form 
+    :ref="`event${event.id}`" 
+    :editEvent="event" 
+    v-if="canEdit"
+    @modify-event="modifyEvent"
+  />
 </div>
 
 </template>
@@ -40,7 +43,7 @@ import EventForm from "./EventForm.vue";
 
 export default {
     props: {
-        event: null
+        event: Object
     },
     components: {
         EventForm
@@ -68,7 +71,7 @@ export default {
         return {
             isLiked: false,
             isSaved: true,
-            canEdit: false
+            canEdit: true
         }
     },
     methods: {
@@ -81,10 +84,14 @@ export default {
         edit() {
             var id = this.event.id;
             //open edit modal
-            this.$refs[`event${this.event.id}`].openModal();
+            console.log(id);
+            this.$refs[`event${id}`].openModal();
         },
         remove() {
 
+        },
+        modifyEvent(result) {
+            this.event = result;
         }
     },
 }
@@ -110,7 +117,14 @@ export default {
     .icons {
         margin-top: 1rem;
     }
-    .edit:hover {
+    .icon {
         color:cornflowerblue;
+    }
+    .icon:hover {
+        color: black;
+    }
+    #your-label {
+        color:cornflowerblue;
+        font-size: 0.7rem;
     }
 </style>
