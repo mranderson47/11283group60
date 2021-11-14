@@ -5,6 +5,9 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
+import Profile from "../views/Profile.vue";
+import Event from "../views/Event.vue";
+import store from "../store/index";
 
 Vue.use(VueRouter);
 
@@ -24,11 +27,24 @@ const routes = [
     component: Login,
   },
 
+  {
+    path: "/event",
+    name: "Event",
+    component: Event,
+    
+  },
+
     //Route for Register view
   {
     path: "/register",
     name: "Register",
     component: Register,
+  },
+
+  {
+    path: "/profile",
+    name: "Profile",
+    component: Profile,
   }
 
 ];
