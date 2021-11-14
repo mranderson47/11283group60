@@ -18,6 +18,7 @@
     <br/>
     <div class="icons">
         <em v-if="canEdit" id="your-label">This is your event<br/></em>
+        <p> {{event.likeCount}}</p>
         <font-awesome-icon v-if="isLiked" v-on:click="likeDislike()" :icon="['fas', 'heart']" class="heart"/> &nbsp;&nbsp;
         <font-awesome-icon v-else v-on:click="likeDislike()" :icon="['far', 'heart']" class="heart"/> &nbsp;&nbsp;
         
@@ -77,6 +78,12 @@ export default {
     methods: {
         likeDislike() {
             this.isLiked = !this.isLiked;
+            if (this.isLiked)
+                this.event.likeCount += 1;
+            else 
+                this.event.likeCount -= 1;
+            //call a function store to like or dislike
+            //add 1 , - 1 event count
         },
         saveOrUnsave() {
             this.isSaved = !this.isSaved;
@@ -88,7 +95,10 @@ export default {
             this.$refs[`event${id}`].openModal();
         },
         remove() {
-
+            if (confirm("are you sure you want to delete this event?")) {
+                this.$store.dispatch("deleteEvent", this.event);
+                location.reload();
+            }
         },
         modifyEvent(result) {
             this.event = result;

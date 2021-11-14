@@ -110,7 +110,8 @@ export default new Vuex.Store({
         title: event.title,
         zipcode: parseInt(event.zipcode),
         locationName: event.locationName,
-        creatorName: this.state.profileFirstName
+        creatorName: this.state.profileFirstName,
+        likeCount: 0
       }
       if (event.description) {
         eventToSave.description = event.description;
@@ -136,6 +137,19 @@ export default new Vuex.Store({
       }
       event.id = id;
       commit("editEvent", event);
+    },
+    // store will get the db collection event, then update the like count
+  
+    async deleteEvent({commit}, event) {
+      let id = event.id;
+      delete event.id;
+      try {
+        await db.collection("events").doc(id).delete();
+      }
+      catch(error) {
+        console.log(error);
+      }
+      event.id = id;
     },
     verifyUser({commit}, token) { //call this function before any changes to db 
       var decoded = jwt_decode(token);
