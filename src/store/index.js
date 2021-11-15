@@ -35,9 +35,9 @@ export default new Vuex.Store({
         state.userEvents.push(payload);
     },
     editEvent(state, payload) {
-      let index = state.events.findIndex((it) => it.id = payload.id);
+      let index = state.events.findIndex((it) => it.id == payload.id);
       state.events[index] = payload;
-      index = state.userEvents.findIndex((it) => it.id = payload.id);
+      index = state.userEvents.findIndex((it) => it.id == payload.id);
       if (index != -1) {
         state.userEvents[index] = payload;
       }
@@ -111,7 +111,8 @@ export default new Vuex.Store({
         zipcode: parseInt(event.zipcode),
         locationName: event.locationName,
         creatorName: this.state.profileFirstName,
-        likeCount: 0
+        likeCount: 0,
+        usersLiked: []
       }
       if (event.description) {
         eventToSave.description = event.description;
@@ -139,6 +140,40 @@ export default new Vuex.Store({
       commit("editEvent", event);
     },
     // store will get the db collection event, then update the like count
+    async addLike({commit}, event) {
+      let id = event.id;
+      delete event.id;
+      event.usersLiked.push(this.state.profileId);
+      
+
+      try {
+        await db.collection("events").doc(id).update(event);
+      }
+      catch (error) {
+        console.log(error);
+      }
+      event.id = id;
+     // commit("editLikes", event);
+    },
+
+    async removeLike({commit}, event) {
+      let id = event.id;
+      delete event.id;
+
+      console.log(event);
+      let index = event.usersLiked.findIndex((it) => it == this.state.profileId);
+      event.usersLiked.splice(index, 1);
+      console.log(event.usersLiked);
+      
+      try {
+        await db.collection("events").doc(id).update(event);
+      }
+      catch (error) {
+        console.log(error);
+      }
+      event.id = id;
+
+    },
   
     async deleteEvent({commit}, event) {
       let id = event.id;

@@ -67,6 +67,7 @@ export default {
     },
     created() {
         this.canEdit = (this.$store.state.userEvents.findIndex((it) => it.id == this.event.id) != -1);
+        this.isLiked = (this.event.usersLiked.findIndex((it) => it == this.$store.state.profileId) != -1);
     },
     data() {
         return {
@@ -78,11 +79,17 @@ export default {
     methods: {
         likeDislike() {
             this.isLiked = !this.isLiked;
-            if (this.isLiked)
+            if (this.isLiked) {
                 this.event.likeCount += 1;
-            else 
+                this.$store.dispatch("addLike", this.event);
+
+            }
+            else {
                 this.event.likeCount -= 1;
             //call a function store to like or dislike
+            this.$store.dispatch("removeLike", this.event);
+            }
+
             //add 1 , - 1 event count
         },
         saveOrUnsave() {
