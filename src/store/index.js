@@ -1,14 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { createStore } from "vuex";
 import firebase from "firebase/app";
 import "firebase/auth";
 import db from "../firebase/firebaseInit";
 import jwt_decode from "jwt-decode";
 
-Vue.use(Vuex)
-
-export default new Vuex.Store({
-  state: {
+export default createStore({
+  "state": {
     //These are global states, such as if the user is logged in, etc.
     user: null,
     profileId: null,
@@ -18,7 +17,7 @@ export default new Vuex.Store({
     events: [],
     userEvents: [],
   },
-  mutations: {
+  "mutations": {
     //Mutations change states to the payload, called using commit
 
     //Updates our user state if we log in.
@@ -40,6 +39,14 @@ export default new Vuex.Store({
       index = state.userEvents.findIndex((it) => it.id == payload.id);
       if (index != -1) {
         state.userEvents[index] = payload;
+      }
+    },
+    deleteEvent(state, payload) {
+      let index = state.events.findIndex((it) => it.id == payload);
+      state.events.splice(index, 1);
+      index = state.userEvents.findIndex((it) => it.id == payload);
+      if (index != -1) {
+        state.userEvents.splice(index, 1);
       }
     },
 
@@ -68,7 +75,7 @@ export default new Vuex.Store({
     },
 
   },
-  actions: {
+  "actions": {
     //Grab the current userID from the database if they are authorized.
     async getCurrentUser( {commit}, user) {
       const dataBase = await db.collection("users").doc(firebase.auth().currentUser.uid);
@@ -103,10 +110,11 @@ export default new Vuex.Store({
       });
     },
     async saveEventToDB({commit}, event) {
+      event.date = event.date.getTime();
       const userRef = await db.collection("users").doc(this.state.profileId);
       var eventToSave = {
         creator: userRef,
-        date: event.date.getTime(),
+        date: event.date,
         title: event.title,
         zipcode: parseInt(event.zipcode),
         locationName: event.locationName,
@@ -139,13 +147,11 @@ export default new Vuex.Store({
       event.id = id;
       commit("editEvent", event);
     },
-    // store will get the db collection event, then update the like count
     async addLike({commit}, event) {
       let id = event.id;
       delete event.id;
       event.usersLiked.push(this.state.profileId);
-      
-
+      event.likeCount+=1;
       try {
         await db.collection("events").doc(id).update(event);
       }
@@ -153,18 +159,19 @@ export default new Vuex.Store({
         console.log(error);
       }
       event.id = id;
-     // commit("editLikes", event);
+      commit("editEvent", event);
     },
 
     async removeLike({commit}, event) {
       let id = event.id;
       delete event.id;
-
-      console.log(event);
       let index = event.usersLiked.findIndex((it) => it == this.state.profileId);
       event.usersLiked.splice(index, 1);
-      console.log(event.usersLiked);
-      
+      if (event.likeCount <= 0) {
+        console.log("error");
+        return;
+      }
+      event.likeCount -= 1;
       try {
         await db.collection("events").doc(id).update(event);
       }
@@ -172,23 +179,21 @@ export default new Vuex.Store({
         console.log(error);
       }
       event.id = id;
-
+      commit("editEvent", event);
     },
   
     async deleteEvent({commit}, event) {
       let id = event.id;
-      delete event.id;
       try {
         await db.collection("events").doc(id).delete();
       }
       catch(error) {
         console.log(error);
       }
-      event.id = id;
+      commit("deleteEvent", id);
     },
     verifyUser({commit}, token) { //call this function before any changes to db 
       var decoded = jwt_decode(token);
-      //console.log(decoded);
       var now = parseInt(new Date().getTime().toString().substring(0,10));
       if (decoded.aud != "beach-avengers" ||
         decoded.auth_time > now ||
@@ -202,5 +207,5 @@ export default new Vuex.Store({
       }
     },
   },
-  modules: {},
+  "modules": {},
 });
