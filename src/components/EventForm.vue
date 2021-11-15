@@ -141,6 +141,9 @@ export default {
             if (typeof this.activeModal.hide === "function") {
                 this.activeModal.hide();
             }
+            if ( !this.event.id) {
+                this.event = {};
+            }
         },
         openModal() {
             const modalElem = this.setUpModalElement();
