@@ -29,9 +29,6 @@
                         <label>ZipCode: </label>
                         <input type="text" class="form-control" id="zip" v-model="searchKey">
                     </div>
-                    <div class="form-group col-md-2">
-                        <button type="button" class="btn btn-secondary header-btn" @click="search">FILTER</button>
-                    </div>
             </div>
             
         </form>
@@ -67,11 +64,27 @@ export default {
     },
     computed: {
         ...mapState(["events"]),
+        filteredEvents() {
+            const zipRegex = /^[0-9]{5}$/;
+            
+            var filter = this.events;
+            if (this.dateBefore)
+                filter = filter.filter((it) => it.date < this.dateBefore.getTime());
+            if (this.dateAfter)
+                filter = filter.filter((it) => it.date > this.dateAfter.getTime());
+            if (this.searchKey.trim() != "") {
+                filter = filter.filter((it) => it.zipcode == this.searchKey.trim());
+            }
+            return filter;
+        },
         eventsFirstHalf() {
-            console.log(this.events);
+            if (this.filteredEvents)
+                return this.filteredEvents.slice(0, Math.ceil(this.filteredEvents.length/2.));
             return this.events.slice(0, Math.ceil(this.events.length/2.));
         },
         eventsSecondHalf() {
+            if (this.filteredEvents)
+                return this.filteredEvents.slice(Math.ceil(this.filteredEvents.length/2.));
             return this.events.slice(Math.ceil(this.events.length/2.));
         }
     },
@@ -87,14 +100,18 @@ export default {
         search() {
             const zipRegex = /^[0-9]{5}$/;
             const input = document.getElementById(`zip`);
-            if (!zipRegex.test(this.searchKey)) {
+            if (this.searchKey != "" && !zipRegex.test(this.searchKey)) {
                 input.classList.add("is-invalid");
                 return;
             }
             input.classList.remove("is-invalid");
-
         },
     },
+    watch: {
+        events: function (val) {
+            console.log("change");
+        },
+    }
 }
 </script>
 <style scoped>
