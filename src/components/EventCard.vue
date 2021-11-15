@@ -8,7 +8,7 @@
     <h4>{{event.title}}</h4> 
     <span><b>Location: </b>{{event.locationName}} | <b>zip:</b> {{event.zipcode}} </span>
     <br/>
-    <span> <b> Date/Time: </b> {{formattedDate}}  </span>
+    <span> <b> Date/Time: </b> {{new Date(event.date)}}</span>
     <br/>
     <span v-if="event.locationLink"> <b> Google Maps Link: </b> {{event.locationLink}} </span>
     <br v-if="event.locationLink"/>
@@ -34,7 +34,6 @@
     :ref="`event${event.id}`" 
     :editEvent="event" 
     v-if="canEdit"
-    @modify-event="modifyEvent"
   />
 </div>
 
@@ -44,14 +43,15 @@ import EventForm from "./EventForm.vue";
 
 export default {
     props: {
-        event: Object
+        event: Object,
+        index: Number
     },
     components: {
         EventForm
     },
     computed: {
         formattedDate() {
-            var date = new Date(this.event.date);
+            var date = new Date(this.event.date.seconds);
             const year = date.getFullYear();
 
             let month = (1 + date.getMonth()).toString();
@@ -64,52 +64,56 @@ export default {
 
             return `${month}/${day}/${year} ${hour}:${minute}`;
         },
+       // event(){
+       //     return this.card;
+       // },
+       // 
+        canEdit: {
+           get(){
+             return this.$store.state.userEvents.findIndex((it) => it.id == this.event.id) != -1
+           },
+           set(newVal){
+             return newVal
+           } 
+        },
+        isLiked: {
+           get(){
+             return this.event.usersLiked.findIndex((it) => it == this.$store.state.profileId) != -1
+           },
+           set(newVal){
+             return newVal
+           } 
+        },
     },
     created() {
-        this.canEdit = (this.$store.state.userEvents.findIndex((it) => it.id == this.event.id) != -1);
-        this.isLiked = (this.event.usersLiked.findIndex((it) => it == this.$store.state.profileId) != -1);
+        
     },
     data() {
         return {
-            isLiked: false,
             isSaved: true,
-            canEdit: true
         }
     },
     methods: {
         likeDislike() {
-            this.isLiked = !this.isLiked;
-            if (this.isLiked) {
-                this.event.likeCount += 1;
+            if (!this.isLiked) {
                 this.$store.dispatch("addLike", this.event);
-
             }
             else {
-                this.event.likeCount -= 1;
-            //call a function store to like or dislike
-            this.$store.dispatch("removeLike", this.event);
+                this.$store.dispatch("removeLike", this.event);
             }
-
-            //add 1 , - 1 event count
         },
         saveOrUnsave() {
             this.isSaved = !this.isSaved;
         },
         edit() {
             var id = this.event.id;
-            //open edit modal
-            console.log(id);
             this.$refs[`event${id}`].openModal();
         },
         remove() {
             if (confirm("are you sure you want to delete this event?")) {
                 this.$store.dispatch("deleteEvent", this.event);
-                location.reload();
             }
         },
-        modifyEvent(result) {
-            this.event = result;
-        }
     },
 }
 </script>

@@ -51,7 +51,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="EventDate">Event Date<span class="requierd-span">*</span></label>
-                                    <date-picker class="form-control" v-model="event.date" type="datetime"></date-picker>
+                                    <Datepicker v-model="event.date" :is24="false" />
                                 </div>
                                 <div class="form-group">
                                     <label for="zipCode">Zip Code<span class="requierd-span">*</span></label>
@@ -108,8 +108,11 @@
 <script>
 
 import { Modal } from "bootstrap";
-import DatePicker from 'vue2-datepicker';
-import 'vue2-datepicker/index.css';
+
+//import DatePicker from "vue3-datepicker";
+//import 'vue3-datepicker/index.css';
+import Datepicker from 'vue3-date-time-picker';
+import 'vue3-date-time-picker/dist/main.css';
 import { mapState } from "vuex";
 export default {
     props: {
@@ -121,16 +124,16 @@ export default {
     created() {
       const tempObj = { ...this.editEvent };
       this.event = this.editEvent != null ? tempObj : {};
+      this.event.date = new Date(this.event.date);
     },
     components: {
-        DatePicker,
+        Datepicker
     },
-    emits:["modify-event"],
     data() {
         return {
             event: {},
             activeModal: {},
-            errorMessages: []
+            errorMessages: [],
         }
     },
     methods: {
@@ -152,11 +155,11 @@ export default {
             return modalElem;
         },
         saveEvent() {
-            if (!this.event.id)
+            if (!this.event.id) {
                 this.$store.dispatch("saveEventToDB", Object.assign({}, this.event));
+            }
             else {
                 this.$store.dispatch("editEvent", Object.assign({}, this.event));
-                this.$emit("modify-event", this.event);
             }
             this.closeModal();
         },

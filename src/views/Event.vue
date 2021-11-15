@@ -42,7 +42,7 @@
                 </div>
             </div>
             <div class="col">
-                <div v-for="(event, index) in eventsSecondHalf" :key="index">
+                <div v-for="(event, index) in eventsSecondHalf" :key="index + eventsFirstHalf.length">
                      <event-card :event="event" />
                 </div>
             </div>
@@ -54,8 +54,8 @@
 
 <script>
 
-import 'vue2-datepicker/index.css';
-import DatePicker from 'vue2-datepicker';
+import DatePicker from 'vue3-date-time-picker';
+import 'vue3-date-time-picker/dist/main.css';
 import { mapState } from "vuex";
 import EventCard from "../components/EventCard.vue"
 import EventForm from "../components/EventForm.vue"
@@ -68,6 +68,7 @@ export default {
     computed: {
         ...mapState(["events"]),
         eventsFirstHalf() {
+            console.log(this.events);
             return this.events.slice(0, Math.ceil(this.events.length/2.));
         },
         eventsSecondHalf() {
@@ -89,9 +90,7 @@ export default {
                 return;
             }
             input.classList.remove("is-invalid");
-            console.log("click");
-            this.$store.dispatch("action1");
-            console.log(this.$store.state.user);
+
         },
     },
 }
