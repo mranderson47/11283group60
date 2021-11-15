@@ -109,8 +109,6 @@
 
 import { Modal } from "bootstrap";
 
-//import DatePicker from "vue3-datepicker";
-//import 'vue3-datepicker/index.css';
 import Datepicker from 'vue3-date-time-picker';
 import 'vue3-date-time-picker/dist/main.css';
 import { mapState } from "vuex";

@@ -19,11 +19,11 @@
             <div class="row">
                     <div class="form-group col-md-2">
                         <label>Search After: </label>
-                        <date-picker class="form-control" type="datetime"></date-picker>
+                        <Datepicker v-model="dateAfter" :is24="false" />
                     </div>
                     <div class="form-group col-md-2">
                         <label>Search Before: </label>
-                        <date-picker class="form-control" type="datetime"></date-picker>
+                        <Datepicker v-model="dateBefore" :is24="false" />
                     </div>
                     <div class="form-group col-md-2">
                         <label>ZipCode: </label>
@@ -54,7 +54,7 @@
 
 <script>
 
-import DatePicker from 'vue3-date-time-picker';
+import Datepicker from 'vue3-date-time-picker';
 import 'vue3-date-time-picker/dist/main.css';
 import { mapState } from "vuex";
 import EventCard from "../components/EventCard.vue"
@@ -63,7 +63,7 @@ export default {
     components: {
         EventCard,
         EventForm,
-        DatePicker
+        Datepicker
     },
     computed: {
         ...mapState(["events"]),
@@ -79,6 +79,8 @@ export default {
     data() {
         return {
             searchKey: "",
+            dateBefore: null,
+            dateAfter: null,
         }
     },
     methods: {

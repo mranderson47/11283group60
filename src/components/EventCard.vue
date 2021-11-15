@@ -18,12 +18,10 @@
     <br/>
     <div class="icons">
         <em v-if="canEdit" id="your-label">This is your event<br/></em>
-        <p> {{event.likeCount}}</p>
-        <font-awesome-icon v-if="isLiked" v-on:click="likeDislike()" :icon="['fas', 'heart']" class="heart"/> &nbsp;&nbsp;
-        <font-awesome-icon v-else v-on:click="likeDislike()" :icon="['far', 'heart']" class="heart"/> &nbsp;&nbsp;
+         {{event.likeCount}}
+        <font-awesome-icon v-if="isLiked" v-on:click="likeDislike()" :icon="['fas', 'heart']" class="heart"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <font-awesome-icon v-else v-on:click="likeDislike()" :icon="['far', 'heart']" class="heart"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         
-        <font-awesome-icon v-if="isSaved" v-on:click="saveOrUnsave()" :icon="['far', 'bookmark']" class=" icon"/> &nbsp;&nbsp;
-        <font-awesome-icon v-else v-on:click="saveOrUnsave()" :icon="['fas', 'bookmark']" class="icon"/>&nbsp;&nbsp;
 
         <font-awesome-icon v-if="canEdit" v-on:click="edit()" :icon="['fas', 'edit']" class="icon"/>&nbsp;&nbsp;
         <font-awesome-icon v-if="canEdit" v-on:click="remove()" :icon="['fas', 'trash']" class="icon"/>&nbsp;&nbsp;
