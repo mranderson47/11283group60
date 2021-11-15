@@ -44,7 +44,6 @@ import EventForm from "./EventForm.vue";
 export default {
     props: {
         event: Object,
-        index: Number
     },
     components: {
         EventForm

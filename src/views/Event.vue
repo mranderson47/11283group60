@@ -37,13 +37,13 @@
         </form>
         <div class="row">
             <div class="col">
-                <div v-for="(event, index) in eventsFirstHalf" :key="index"> 
-                    <event-card :event="event" />
+                <div v-for="(event) in eventsFirstHalf" :key="event.id"> 
+                    <event-card :key="event.id" :event="event" />
                 </div>
             </div>
             <div class="col">
-                <div v-for="(event, index) in eventsSecondHalf" :key="index + eventsFirstHalf.length">
-                     <event-card :event="event" />
+                <div v-for="(event) in eventsSecondHalf" :key="event.id">
+                     <event-card :key="event.id" :event="event"/>
                 </div>
             </div>
         </div>
