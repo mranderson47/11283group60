@@ -40,21 +40,33 @@
                 </div>
             </div> 
         </div>
-
         <h2>Events you've created</h2>
         <div class="row event-container">
             <div class="col">
                 <div v-for="(event, index) in eventsFirstHalf" :key="index"> 
-                    <event-card :event="event" />
+                    <event-card :event="event" :key="`created${event.id}`" />
                 </div>
             </div>
             <div class="col">
                 <div v-for="(event, index) in eventsSecondHalf" :key="index">
-                     <event-card :event="event" />
+                     <event-card :event="event" :key="`created${event.id}`" />
                 </div>
             </div>
         </div>
 
+        <h2>Events you've liked</h2>
+        <div class="row event-container">
+            <div class="col">
+                <div v-for="(event, index) in likedEventsFirstHalf" :key="index"> 
+                    <event-card :event="event" :key="`liked${event.id}`" />
+                </div>
+            </div>
+            <div class="col">
+                <div v-for="(event, index) in likedEventsSecondHalf" :key="index">
+                     <event-card :event="event" :key="`liked${event.id}`" />
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -79,12 +91,18 @@ export default {
 
     computed: {
         
-        ...mapState(["userEvents"]),
+        ...mapState(["userEvents", "likedEvents"]),
         eventsFirstHalf() {
             return this.userEvents.slice(0, Math.ceil(this.userEvents.length/2.));
         },
         eventsSecondHalf() {
             return this.userEvents.slice(Math.ceil(this.userEvents.length/2.));
+        },
+        likedEventsFirstHalf() {
+            return this.likedEvents.slice(0, Math.ceil(this.likedEvents.length/2.));
+        },
+        likedEventsSecondHalf() {
+            return this.likedEvents.slice(Math.ceil(this.likedEvents.length/2.));
         },
 
         firstName: {

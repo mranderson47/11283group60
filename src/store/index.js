@@ -16,6 +16,7 @@ export default createStore({
     token: null,
     events: [],
     userEvents: [],
+    likedEvents: [],
   },
   "mutations": {
     //Mutations change states to the payload, called using commit
@@ -32,6 +33,9 @@ export default createStore({
       state.events.push(payload);
       if (payload.creator.id == state.profileId)
         state.userEvents.push(payload);
+      let index = payload.usersLiked.findIndex((it) => it == state.profileId);
+      if (index != -1)
+        state.likedEvents.push(payload);
     },
     editEvent(state, payload) {
       let index = state.events.findIndex((it) => it.id == payload.id);
@@ -48,6 +52,18 @@ export default createStore({
       if (index != -1) {
         state.userEvents.splice(index, 1);
       }
+    },
+
+    addToLikedEvents(state, payload) {
+      state.likedEvents.push(payload);
+
+    },
+
+    removeFromLikedEvents(state, payload) {
+      let index = state.likedEvents.findIndex((it) => it.id == payload.id);
+      if (index != -1)
+        state.likedEvents.splice(index, 1);
+
     },
 
     //Request to change the first name of the profile
@@ -160,6 +176,7 @@ export default createStore({
       }
       event.id = id;
       commit("editEvent", event);
+      commit("addToLikedEvents", event);
     },
 
     async removeLike({commit}, event) {
@@ -180,6 +197,7 @@ export default createStore({
       }
       event.id = id;
       commit("editEvent", event);
+      commit("removeFromLikedEvents", event);
     },
   
     async deleteEvent({commit}, event) {
