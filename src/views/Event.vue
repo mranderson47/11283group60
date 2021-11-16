@@ -97,15 +97,7 @@ export default {
         }
     },
     methods: {
-        search() {
-            const zipRegex = /^[0-9]{5}$/;
-            const input = document.getElementById(`zip`);
-            if (this.searchKey != "" && !zipRegex.test(this.searchKey)) {
-                input.classList.add("is-invalid");
-                return;
-            }
-            input.classList.remove("is-invalid");
-        },
+
     },
     watch: {
         events: function (val) {

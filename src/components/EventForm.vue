@@ -51,7 +51,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="EventDate">Event Date<span class="requierd-span">*</span></label>
-                                    <Datepicker v-model="event.date" :is24="false" />
+                                    <Datepicker v-model="event.date" :is24="false" :minDate="new Date().getTime()"/>
                                 </div>
                                 <div class="form-group">
                                     <label for="zipCode">Zip Code<span class="requierd-span">*</span></label>

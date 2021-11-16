@@ -61,10 +61,6 @@ export default {
 
             return `${month}/${day}/${year} ${hour}:${minute}`;
         },
-       // event(){
-       //     return this.card;
-       // },
-       // 
         canEdit: {
            get(){
              return this.$store.state.userEvents.findIndex((it) => it.id == this.event.id) != -1
@@ -82,9 +78,6 @@ export default {
            } 
         },
     },
-    created() {
-        
-    },
     data() {
         return {
             isSaved: true,
@@ -98,9 +91,6 @@ export default {
             else {
                 this.$store.dispatch("removeLike", this.event);
             }
-        },
-        saveOrUnsave() {
-            this.isSaved = !this.isSaved;
         },
         edit() {
             var id = this.event.id;

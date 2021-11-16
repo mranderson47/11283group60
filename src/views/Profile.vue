@@ -44,12 +44,12 @@
         <div class="row event-container">
             <div class="col">
                 <div v-for="(event, index) in eventsFirstHalf" :key="index"> 
-                    <event-card :event="event" :key="`created${event.id}`" />
+                    <event-card :event="event" :key="event.id" />
                 </div>
             </div>
             <div class="col">
                 <div v-for="(event, index) in eventsSecondHalf" :key="index">
-                     <event-card :event="event" :key="`created${event.id}`" />
+                     <event-card :event="event" :key="event.id" />
                 </div>
             </div>
         </div>
@@ -58,12 +58,12 @@
         <div class="row event-container">
             <div class="col">
                 <div v-for="(event, index) in likedEventsFirstHalf" :key="index"> 
-                    <event-card :event="event" :key="`liked${event.id}`" />
+                    <event-card :event="event" :key="event.id" />
                 </div>
             </div>
             <div class="col">
                 <div v-for="(event, index) in likedEventsSecondHalf" :key="index">
-                     <event-card :event="event" :key="`liked${event.id}`" />
+                     <event-card :event="event" :key="event.id" />
                 </div>
             </div>
         </div>

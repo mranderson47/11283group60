@@ -44,6 +44,10 @@ export default createStore({
       if (index != -1) {
         state.userEvents[index] = payload;
       }
+      index = state.likedEvents.findIndex((it) => it.id == payload.id);
+      if (index != -1) {
+        state.likedEvents[index] = payload;
+      }
     },
     deleteEvent(state, payload) {
       let index = state.events.findIndex((it) => it.id == payload);
@@ -51,6 +55,10 @@ export default createStore({
       index = state.userEvents.findIndex((it) => it.id == payload);
       if (index != -1) {
         state.userEvents.splice(index, 1);
+      }
+      index = state.likedEvents.findIndex((it) => it.id == payload);
+      if (index != -1) {
+        state.likedEvents.splice(index, 1);
       }
     },
 
