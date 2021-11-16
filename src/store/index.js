@@ -96,6 +96,7 @@ export default new Vuex.Store({
               eventToSave.id = doc.id;
               // doc.data() is never undefined for query doc snapshots
               commit("addEvent", eventToSave);
+              //Test
           });
       })
       .catch((error) => {
