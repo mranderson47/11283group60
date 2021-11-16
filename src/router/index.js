@@ -1,5 +1,4 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 
 //Here is where we import the views for the router to use
 import Home from "../views/Home.vue";
@@ -9,7 +8,6 @@ import Profile from "../views/Profile.vue";
 import Event from "../views/Event.vue";
 import store from "../store/index";
 
-Vue.use(VueRouter);
 
 const routes = [
   //Route for Home View
@@ -47,11 +45,10 @@ const routes = [
     component: Profile,
   }
 
-];
+],
 
-const router = new VueRouter({
-  mode: "history",
-  base: process.env.BASE_URL,
+router = createRouter({
+  history: createWebHistory("beach-avengers"),
   routes,
 });
 
