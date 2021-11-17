@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import { createStore } from "vuex";
 import firebase from "firebase/app";
 import "firebase/auth";
+import "firebase/storage";
 import db from "../firebase/firebaseInit";
 import jwt_decode from "jwt-decode";
 
@@ -133,6 +134,11 @@ export default createStore({
           console.log("Error getting documents: ", error);
       });
     },
+    async getImageUrl({commit}, image) {
+      const storageRef = await firebase.storage().ref(`event-images/${image.name}`).put(image);
+      const s = await firebase.storage().ref(`event-images/${image.name}`).getDownloadURL();
+      return s;
+    },
     async saveEventToDB({commit}, event) {
       event.date = event.date.getTime();
       const userRef = await db.collection("users").doc(this.state.profileId);
@@ -144,6 +150,7 @@ export default createStore({
         locationName: event.locationName,
         creatorName: this.state.profileFirstName,
         likeCount: 0,
+        imageUrl: event.imageUrl,
         usersLiked: []
       }
       if (event.description) {
