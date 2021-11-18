@@ -18,6 +18,7 @@ export default createStore({
     events: [],
     userEvents: [],
     likedEvents: [],
+    profileImage: null,
   },
   "mutations": {
     //Mutations change states to the payload, called using commit
@@ -97,6 +98,11 @@ export default createStore({
       state.profileId = doc.id;
       state.profileFirstName = doc.data().firstName;
       state.profileLastName = doc.data().lastName;
+      state.profileImage = doc.data().profileImage;
+    },
+    
+    changeProfileImage(state, payload) {
+      state.profileImage = payload;
     },
 
   },
@@ -117,6 +123,7 @@ export default createStore({
       await dataBase.update({
         firstName: state.profileFirstName,
         lastName: state.profileLastName,
+        profileImage: state.profileImage,
       });
     },
     async getEvents({commit}) {
