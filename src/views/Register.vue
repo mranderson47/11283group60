@@ -46,7 +46,8 @@
             <input type="password" class="form-control" id="exampleFormControlInput1" v-model="confirmPW">
           </div>
           <div class="form-group">
-            <button type="submit" class="btn btn-primary" >Sign up</button>
+            <p><button type="submit" class="btn btn-primary" >Sign up</button> </p>
+            
           </div>
         </form>
     </div>
@@ -57,7 +58,6 @@
 import "firebase/auth";
 import firebase from "firebase/app"
 import db from "../firebase/firebaseInit"
-
 export default {
   name: "Register",
   components: {}, 
@@ -117,6 +117,8 @@ export default {
       }
       return;
   },
+  
+    
 
   }
 

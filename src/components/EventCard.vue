@@ -1,5 +1,5 @@
-<template>
 
+<template>
 <div class="row card-event hover-shadow" >
   <div class="col-md-5">
     <img class="card-img-top" src="https://clubsolaris.com/imgs/tips-to-take-care-of-the-beach-during-your-vacations/beach-sea-cancun-sun.png" alt="Card image cap"> <!-- Replace the src with the photo from the database for the event -->
@@ -25,9 +25,15 @@
 
         <font-awesome-icon v-if="canEdit" v-on:click="edit()" :icon="['fas', 'edit']" class="icon"/>&nbsp;&nbsp;
         <font-awesome-icon v-if="canEdit" v-on:click="remove()" :icon="['fas', 'trash']" class="icon"/>&nbsp;&nbsp;
+      
+     
+ 
+    
 
+                
     </div>
   </div>
+  
   <event-form 
     :ref="`event${event.id}`" 
     :editEvent="event" 
@@ -38,8 +44,12 @@
 </template>
 <script>
 import EventForm from "./EventForm.vue";
+import React, { useEffect, useState } from "react";
+import Vue from 'vue';
+import $ from 'jquery';
 
 export default {
+    
     props: {
         event: Object,
     },
@@ -81,8 +91,11 @@ export default {
     data() {
         return {
             isSaved: true,
-        }
-    },
+        
+    }
+},
+        
+      
     methods: {
         likeDislike() {
             if (!this.isLiked) {
@@ -103,9 +116,40 @@ export default {
         },
     },
 }
+
 </script>
 <style scoped>
-
+.container {
+	max-width: 640px;
+	margin: 30px auto;
+	background: #fff;
+	border-radius: 8px;
+	padding: 20px;
+}
+.comment {
+	display: block;
+	transition: all 1s;
+}
+.commentClicked {
+	min-height: 0px;
+	border: 1px solid #eee;
+	border-radius: 5px;
+	padding: 5px 10px
+}
+button.primaryContained {
+	background: #016ba8;
+	color: #fff;
+	padding: 10px 10px;
+	border: none;
+	margin-top: 0px;
+	cursor: pointer;
+	text-transform: uppercase;
+	letter-spacing: 4px;
+	box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.25);
+	transition: 1s all;
+	font-size: 10px;
+	border-radius: 5px;
+}
      .card-event {
         margin: 2rem;
 
@@ -122,6 +166,7 @@ export default {
     .heart {
         color: pink;
     }
+   
     .icons {
         margin-top: 1rem;
     }
@@ -135,4 +180,6 @@ export default {
         color:cornflowerblue;
         font-size: 0.7rem;
     }
+    
 </style>
+
