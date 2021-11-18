@@ -43,7 +43,7 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="exampleFormControlFile1">Cover Photo</label><br>
-                                    <input type="file" class="form-control form-control-file">
+                                    <input type="file" @change="selectImage" class="form-control form-control-file">
                                 </div>
                                 <div class="form-group">
                                     <label for="eventName">Event Name<span class="requierd-span">*</span></label>
@@ -133,6 +133,7 @@ export default {
             event: {},
             activeModal: {},
             errorMessages: [],
+            image: null,
         }
     },
     methods: {
@@ -156,7 +157,12 @@ export default {
                 );
             return modalElem;
         },
-        saveEvent() {
+        async saveEvent() {
+            var url = null;
+            if (this.image) {
+                url = await this.$store.dispatch("getImageUrl", this.image);
+                this.event.imageUrl = url;
+            }
             if (!this.event.id) {
                 this.$store.dispatch("saveEventToDB", Object.assign({}, this.event));
             }
@@ -164,6 +170,11 @@ export default {
                 this.$store.dispatch("editEvent", Object.assign({}, this.event));
             }
             this.closeModal();
+        },
+        selectImage(e) {
+            if (e.target.files[0]) {
+                this.image = e.target.files[0];
+            }
         },
         onSave() {
             this.errorMessages = [];

@@ -2,7 +2,8 @@
 <template>
 <div class="row card-event hover-shadow" >
   <div class="col-md-5">
-    <img class="card-img-top" src="https://clubsolaris.com/imgs/tips-to-take-care-of-the-beach-during-your-vacations/beach-sea-cancun-sun.png" alt="Card image cap"> <!-- Replace the src with the photo from the database for the event -->
+    <img v-if="event.imageUrl" class="card-img-top" :src="`${event.imageUrl}`" alt="Card image cap"> 
+    <img v-else class="card-img-top" src="https://clubsolaris.com/imgs/tips-to-take-care-of-the-beach-during-your-vacations/beach-sea-cancun-sun.png" alt="Card image cap">
   </div>
   <div class="col-md-7 card-body yours">
     <h4>{{event.title}}</h4> 
