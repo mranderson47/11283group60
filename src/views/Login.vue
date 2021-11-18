@@ -4,7 +4,7 @@
   <form class="login">
       <p class="login-register">
         Don't have an account?
-        <router-link class="router-link" :to="{ name: 'Register' }">Register</router-link>
+        <br><button1> <router-link class="googlebutton" :to="{ name: 'Register' }">Register here! </router-link></button1>
       </p>
       <h2>Login to Beach Avengers</h2>
       <div class="inputs">
@@ -77,7 +77,6 @@ methods: {
     
     
 },
-
 
     //.catch((err) => {
       //alert('Oops.' + err.message)
