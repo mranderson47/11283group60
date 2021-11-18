@@ -98,7 +98,9 @@ export default createStore({
       state.profileId = doc.id;
       state.profileFirstName = doc.data().firstName;
       state.profileLastName = doc.data().lastName;
-      state.profileImage = doc.data().profileImage;
+      if (doc.data().profileImage) {
+        state.profileImage = doc.data().profileImage;
+      }
     },
     
     changeProfileImage(state, payload) {
@@ -142,8 +144,9 @@ export default createStore({
       });
     },
     async getImageUrl({commit}, image) {
-      const storageRef = await firebase.storage().ref(`event-images/${image.name}`).put(image);
-      const s = await firebase.storage().ref(`event-images/${image.name}`).getDownloadURL();
+      var name = new Date().getTime();
+      const storageRef = await firebase.storage().ref(`event-images/${name}`).put(image);
+      const s = await firebase.storage().ref(`event-images/${name}`).getDownloadURL();
       return s;
     },
     async saveEventToDB({commit}, event) {

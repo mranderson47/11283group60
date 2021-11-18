@@ -116,7 +116,8 @@
 <div class="tab-content" id="myTabContent">
   <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
 
-<h2>Events you've created</h2>
+    <h2 v-if="eventsFirstHalf.length>0">Events you've created</h2>
+    <i v-else>You haven't created any events yet</i>
         <div class="row event-container">
             <div class="col">
                 <div v-for="(event, index) in eventsFirstHalf" :key="index"> 
@@ -134,7 +135,8 @@
   </div>
   <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
 
-<h2>Events you've liked</h2>
+    <h2 v-if="likedEventsFirstHalf.length>0">Events you've liked</h2>
+    <i v-else>You don't like any events :(</i>
         <div class="row event-container">
             <div class="col">
                 <div v-for="(event, index) in likedEventsFirstHalf" :key="index"> 
@@ -152,6 +154,7 @@
   <!-- <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div> -->
 </div>
 
+<br/><br/>
         <!--Ending of tabs-->
 
 
