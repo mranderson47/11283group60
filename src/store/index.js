@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import { createStore } from "vuex";
 import firebase from "firebase/app";
 import "firebase/auth";
+import "firebase/storage";
 import db from "../firebase/firebaseInit";
 import jwt_decode from "jwt-decode";
 
@@ -17,6 +18,7 @@ export default createStore({
     events: [],
     userEvents: [],
     likedEvents: [],
+    profileImage: null,
   },
   "mutations": {
     //Mutations change states to the payload, called using commit
@@ -96,6 +98,13 @@ export default createStore({
       state.profileId = doc.id;
       state.profileFirstName = doc.data().firstName;
       state.profileLastName = doc.data().lastName;
+      if (doc.data().profileImage) {
+        state.profileImage = doc.data().profileImage;
+      }
+    },
+    
+    changeProfileImage(state, payload) {
+      state.profileImage = payload;
     },
 
   },
@@ -116,6 +125,7 @@ export default createStore({
       await dataBase.update({
         firstName: state.profileFirstName,
         lastName: state.profileLastName,
+        profileImage: state.profileImage,
       });
     },
     async getEvents({commit}) {
@@ -133,6 +143,12 @@ export default createStore({
           console.log("Error getting documents: ", error);
       });
     },
+    async getImageUrl({commit}, image) {
+      var name = new Date().getTime();
+      const storageRef = await firebase.storage().ref(`event-images/${name}`).put(image);
+      const s = await firebase.storage().ref(`event-images/${name}`).getDownloadURL();
+      return s;
+    },
     async saveEventToDB({commit}, event) {
       event.date = event.date.getTime();
       const userRef = await db.collection("users").doc(this.state.profileId);
@@ -144,6 +160,7 @@ export default createStore({
         locationName: event.locationName,
         creatorName: this.state.profileFirstName,
         likeCount: 0,
+        imageUrl: event.imageUrl,
         usersLiked: []
       }
       if (event.description) {
