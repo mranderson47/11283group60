@@ -20,12 +20,12 @@
 
 
 <div class = "Name"> 
-<h2>{{$store.state.profileFirstName}} {{$store.state.profileLastName}}</h2>
+<h2><center>{{$store.state.profileFirstName}} {{$store.state.profileLastName}}</center></h2>
 </div>
 
 <div
         class="modal fade"
-        :id="`edit-profile`"
+        id="edit-profile"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
         >
@@ -183,7 +183,6 @@ export default {
     methods: {
         updateProfile(){
             this.$store.dispatch("updateUserSettings");
-            //this.$router.push({name: "Home"});
         },
 
         closeModal() {
@@ -198,9 +197,7 @@ export default {
         },
         setUpModalElement() {
             const self = this,
-                modalElem = document.getElementById(
-                `edit-profile`
-                );
+                modalElem = document.getElementById("edit-profile");
             return modalElem;
         },
         async onSave() {
@@ -283,12 +280,6 @@ export default {
     max-height: 22%;
     margin-left: 40%;
     margin-top: 5%;
-
-    }
-
-    .Name {
-
-        margin-left: 43%;
 
     }
 
