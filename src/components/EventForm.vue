@@ -112,6 +112,7 @@ import { Modal } from "bootstrap";
 import Datepicker from 'vue3-date-time-picker';
 import 'vue3-date-time-picker/dist/main.css';
 import { mapState } from "vuex";
+
 export default {
     props: {
       editEvent: {
@@ -203,6 +204,7 @@ export default {
             }
         }
     },
+    
 }
 </script>
 <style scoped>

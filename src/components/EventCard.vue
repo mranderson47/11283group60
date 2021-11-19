@@ -1,5 +1,5 @@
-<template>
 
+<template>
 <div class="row card-event hover-shadow" >
   <div class="col-md-5">
     <img v-if="event.imageUrl" class="card-img-top" :src="`${event.imageUrl}`" alt="Card image cap"> 
@@ -26,9 +26,9 @@
 
         <font-awesome-icon v-if="canEdit" v-on:click="edit()" :icon="['fas', 'edit']" class="icon"/>&nbsp;&nbsp;
         <font-awesome-icon v-if="canEdit" v-on:click="remove()" :icon="['fas', 'trash']" class="icon"/>&nbsp;&nbsp;
-
     </div>
   </div>
+  
   <event-form 
     :ref="`event${event.id}`" 
     :editEvent="event" 
@@ -41,6 +41,7 @@
 import EventForm from "./EventForm.vue";
 
 export default {
+    
     props: {
         event: Object,
     },
@@ -82,8 +83,11 @@ export default {
     data() {
         return {
             isSaved: true,
-        }
-    },
+        
+    }
+},
+        
+      
     methods: {
         likeDislike() {
             if (!this.isLiked) {
@@ -104,9 +108,16 @@ export default {
         },
     },
 }
+
 </script>
 <style scoped>
-
+    .container {
+        max-width: 640px;
+        margin: 30px auto;
+        background: #fff;
+        border-radius: 8px;
+        padding: 20px;
+    }
      .card-event {
         margin: 2rem;
 
@@ -123,6 +134,7 @@ export default {
     .heart {
         color: pink;
     }
+   
     .icons {
         margin-top: 1rem;
     }
@@ -136,4 +148,6 @@ export default {
         color:cornflowerblue;
         font-size: 0.7rem;
     }
+    
 </style>
+

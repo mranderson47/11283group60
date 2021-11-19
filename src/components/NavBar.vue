@@ -23,12 +23,11 @@
                 </li>
             </ul>
 
-            <div v-if="user" class=" user col-md-1">
+            <div v-if="user" class="user col-md-1">
                 <a href="./profile">
-                    <font-awesome-icon icon="user-circle" size="2x"/>
+                    <font-awesome-icon icon="user-circle" size="2x"/>{{this.$store.state.profileFirstName}}
                 </a>
             </div>
-
         </div>
         </nav>
 </template>
@@ -36,7 +35,7 @@
 <script>
 
 import firebase from "firebase/app";
-
+import "firebase/auth";
 export default {
 
     methods:{
@@ -50,10 +49,8 @@ export default {
     computed: {
         //Return the current user session
         user() {
-        return this.$store.state.user;
+            return this.$store.state.user;
         },
-
-
     }
 }
 </script>
@@ -79,6 +76,8 @@ export default {
             color: rgba(255, 255, 255, 0.384);
         }
     }
-
+    a {
+        color: white;
+    }
 
 </style>
