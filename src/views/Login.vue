@@ -1,40 +1,42 @@
 <template>
-
- 
-  <form class="login">
-      <p class="login-register">
-        Don't have an account?
-        <br><button1> <router-link class="googlebutton" :to="{ name: 'Register' }">Register here! </router-link></button1>
-      </p>
-      <h2>Login to Beach Avengers</h2>
-      <div class="inputs">
-        <div class="input">
-          <input type="text" placeholder="Email" v-model="email" />
+  <div class="logIn">
+    <form >
+        <p>
+            Don't have an account?
+            <router-link class="router-link" :to="{ name: 'Register' }">Register</router-link>
+        </p>
+        <br/>
+        <h2>Login to Beach Avengers</h2>
+        <br/>
+        <div class="form-group">
+            <label for="exampleFormControlInput1">Email address <span class="requierd-span">*</span></label>
+            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" v-model="email">
         </div>
-        <div class="input">
-          <input type="password" placeholder="Password" v-model="password" />
+        <br/>
+        <div class="form-group">
+            <label for="exampleFormControlInput1">Password <span class="requierd-span">*</span></label>
+            <input type="email" class="form-control" id="exampleFormControlInput1" v-model="password">
         </div>
-        <!--<div v-show="error" class="error">{{ this.errorMsg }}</div> -->
+        <br/>
+        <div class="form-group">
+            <p><button type="submit" class="btn btn-primary" @click="signIn()">Log In</button> </p>
+        </div>
+        <br/>
+        <hr/>
+        <h3><center> OR </center></h3>
+        <div class="row">
+          <p class="col-md-6"><center><button1 class="googlebutton" @click="signInGoogle()">Log in with Google</button1></center></p>
+          <p class="col-md-6"><center><button1 class="facebookbutton" @click="signInFacebook()">Log in with Facebook</button1></center></p>
+        </div>
+        <div>
       </div>
-      <!--<router-link class="forgot-password" :to="{ name: 'ForgotPassword' }"
-        >Forgot your password?</router-link> -->
-      <p><button @click.prevent="signIn">Sign In</button> </p>
-    
-    
-
-      <p><button1 class="googlebutton" @click="signInGoogle()">Log in with Google</button1></p>
-      <p><button1 class="facebookbutton" @click="signInFacebook()">Log in with Facebook</button1></p>
-       <div>
-    </div>
     </form>
+  </div>
 </template>
 <script>
 
 import firebase from "firebase/app"
 import "firebase/auth"
-import React, { Component } from "react";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-
 
 export default {
   name: "Login",
@@ -49,71 +51,75 @@ export default {
   },
 methods: {
   signIn() {
-      firebase
-        .auth()
-        .signInWithEmailAndPassword(this.email, this.password)
-        .then(() => {
-          this.$router.push({ name: "Home" });
-          //this.error = false;
-          //this.errorMsg = "";
-          console.log(firebase.auth().currentUser.uid);
-        })
-        //.catch((err) => {
-         // this.error = true;
-       //   this.errorMsg = err.message;
-       // });
-    },
-   
-    signInGoogle() {
-      const googleAuth = new firebase.auth.GoogleAuthProvider();
-       
-            
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(this.email, this.password)
+      .then(() => {
+        this.$router.push({ name: "Home" });
+        console.log(firebase.auth().currentUser.uid);
+      })
+  },
+  
+  signInGoogle() {
+    const googleAuth = new firebase.auth.GoogleAuthProvider();     
     firebase.auth().signInWithPopup(googleAuth).then((result)=>{
-       console.log(firebase.auth().currentUser.uid);
+      if ( result.additionalUserInfo.isNewUser) {
+        this.$store.dispatch("createExternalUser", result.user);
+      }
       this.$router.push({name:"Home"});
-      
     }) 
-    
-    
-    
-},
-
-    //.catch((err) => {
-      //alert('Oops.' + err.message)
-    //});
-    
-    signInFacebook() {
-      const FacebookAuth = new firebase.auth.FacebookAuthProvider();              
-           firebase.auth().signInWithPopup(FacebookAuth);
-    },
-
-
-
+  },
+  
+  signInFacebook() {
+    const FacebookAuth = new firebase.auth.FacebookAuthProvider();              
+    firebase.auth().signInWithPopup(FacebookAuth).then((result)=>{
+      console.log(result);
+      let userToSave = {
+        photoURL: result.additionalUserInfo.profile.picture.data.url,
+        email: result.user.email,
+        displayName: result.user.displayName,
+        uid: result.user.uid
+      }
+      console.log(userToSave);
+      if ( result.additionalUserInfo.isNewUser) {
+        this.$store.dispatch("createExternalUser", userToSave);
+      }
+      this.$router.push({name:"Home"});
+    });
+  },
 }
 
 };
 </script>
 <style >
-.googlebutton {
-  display: inline-block;
-  padding: 4px 8px;
-  border-radius: 3px;
-  background-color: #3c82f7;
-  color: #fff;
-  box-shadow: 0 3px 0 #0f69ff;
-  cursor: pointer;
-  
-}
-.facebookbutton {
-  display: inline-block;
-  padding: 4px 8px;
-  border-radius: 3px;
-  background-color: #3cc8f7;
-  color: #fff;
-  box-shadow: 0 3px 0 #3cc8f7;
-  cursor: pointer;
-  
-}
-  </style>
+  .googlebutton {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 3px;
+    background-color: #3c82f7;
+    color: #fff;
+    box-shadow: 0 3px 0 #0f69ff;
+    cursor: pointer;
+    
+  }
+  .facebookbutton {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 3px;
+    background-color: #3cc8f7;
+    color: #fff;
+    box-shadow: 0 3px 0 #3cc8f7;
+    cursor: pointer;
+    
+  }
+ .requierd-span {
+    color: red;
+  }
+  .logIn {
+    width: 25%;
+    padding-bottom: 100px;
+    margin-left: 37.25%;
+  }
+</style>
 
 

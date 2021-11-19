@@ -50,6 +50,14 @@
             
           </div>
         </form>
+        <br/><br/>
+        <hr/>
+        <h3><center> OR </center></h3>
+        <div class="row">
+          <p class="col-md-6"><center><button1 class="googlebutton" @click="signInGoogle()">Sign up with Google</button1></center></p>
+          <p class="col-md-6"><center><button1 class="facebookbutton" @click="signInFacebook()">Sign up with Facebook</button1></center></p>
+        </div>
+
     </div>
 </template>
 
@@ -108,18 +116,33 @@ export default {
               password: this.password,
               firstName: this.firstName,
               lastName: this.lastName
-              
           });
-          //Push the user to the homepage on signup
-          this.$router.push({name: "Home"});
-
-          return;
       }
-      return;
-  },
-  
+      this.$router.push({name:"Home"});
+    },
+     signInGoogle() {
+      const googleAuth = new firebase.auth.GoogleAuthProvider();     
+      firebase.auth().signInWithPopup(googleAuth).then((result)=>{
+        this.$store.dispatch("createExternalUser", result.user);
+        this.$router.push({name:"Home"});
+      }); 
+    },
     
-
+    signInFacebook() {
+      const FacebookAuth = new firebase.auth.FacebookAuthProvider();              
+      firebase.auth().signInWithPopup(FacebookAuth).then((result)=>{
+        let userToSave = {
+          photoURL: result.additionalUserInfo.profile.picture.data.url,
+          email: result.user.email,
+          displayName: result.user.displayName,
+          uid: result.user.uid
+        }
+        if ( result.additionalUserInfo.isNewUser) {
+          this.$store.dispatch("createExternalUser", userToSave);
+        }
+        this.$router.push({name:"Home"});
+      });
+    },
   }
 
 };

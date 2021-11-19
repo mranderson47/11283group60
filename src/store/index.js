@@ -92,14 +92,13 @@ export default createStore({
       state.profileLastName = null;
       state.token = null;
     },
-
     //Set the information from the database to be available to the store based on the user (grabbing data basically)
-    setProfileInfo(state, doc) {
-      state.profileId = doc.id;
-      state.profileFirstName = doc.data().firstName;
-      state.profileLastName = doc.data().lastName;
-      if (doc.data().profileImage) {
-        state.profileImage = doc.data().profileImage;
+    setProfileInfo(state, payload) {
+      state.profileId = payload.id;
+      state.profileFirstName = payload.firstName;
+      state.profileLastName = payload.lastName;
+      if (payload.profileImage) {
+        state.profileImage = payload.profileImage;
       }
     },
     
@@ -111,13 +110,29 @@ export default createStore({
   "actions": {
     //Grab the current userID from the database if they are authorized.
     async getCurrentUser( {commit}, user) {
+      console.log(firebase.auth().currentUser.uid);
       const dataBase = await db.collection("users").doc(firebase.auth().currentUser.uid);
       const dbResults = await dataBase.get();
-      commit("setProfileInfo", dbResults);
+      console.log(dbResults);
+      var userToSave = dbResults.data();
+      userToSave.id = dbResults.id;
+      commit("setProfileInfo", userToSave);
       const token = await user.getIdTokenResult();
       commit("setIdToken", token.token);
       this.dispatch("verifyUser", token.token);
       
+    },
+    async createExternalUser({commit}, user) {
+      const userRef = await db.collection("users").doc(user.uid);
+      var userToSave = {
+        firstName: user.displayName.split(' ')[0],
+        lastName: user.displayName.split(' ')[1],
+        email: user.email,
+        profileImage: user.photoURL,
+      }
+      await userRef.set(userToSave);
+      userToSave.id = user.uid
+      commit("setProfileInfo", userToSave);
     },
     async updateUserSettings({ state }) {
       this.dispatch("verifyUser", state.token);
@@ -160,7 +175,6 @@ export default createStore({
         locationName: event.locationName,
         creatorName: this.state.profileFirstName,
         likeCount: 0,
-        imageUrl: event.imageUrl,
         usersLiked: []
       }
       if (event.description) {
@@ -168,6 +182,9 @@ export default createStore({
       }
       if (event.locationLink) {
         eventToSave.locationLink = event.locationLink;
+      }
+      if (event.imageUrl) {
+        eventToSave.imageUrl = event.imageUrl;
       }
       const eventsRef = db.collection("events").doc();
       await eventsRef.set(eventToSave);
