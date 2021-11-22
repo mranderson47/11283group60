@@ -15,7 +15,7 @@
         <br/>
         <div class="form-group">
             <label for="exampleFormControlInput1">Password <span class="requierd-span">*</span></label>
-            <input type="email" class="form-control" id="exampleFormControlInput1" v-model="password">
+            <input type="password" class="form-control" id="exampleFormControlInput1" v-model="password">
         </div>
         <br/>
         <div class="form-group">
